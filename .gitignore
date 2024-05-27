@@ -1,0 +1,17 @@
+# Ignore everything by default
+/*
+
+# Do not ignore the .gitignore file itself
+!.gitignore
+
+# Do not ignore the Assets folder
+!ASSETS/
+
+# Ignore everything in the Assets folder
+ASSETS/*
+
+# Do not ignore the Source folder within Assets
+!ASSETS/Source/
+
+# Ignore .meta files in the Source folder
+ASSETS/Source/*.meta
