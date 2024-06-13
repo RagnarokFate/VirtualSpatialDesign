@@ -71,7 +71,7 @@ Material:
     - _ColorWriteMask: 15
     - _CullMode: 2
     - _CustomMode: 1
-    - _Cutoff: 0.5
+    - _Cutoff: 0.416
     - _DirectionalLight: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 1
@@ -103,7 +103,7 @@ Material:
     - _IridescenceAngle: -0.78
     - _IridescenceIntensity: 0.5
     - _IridescenceThreshold: 0.05
-    - _Metallic: 0.073
+    - _Metallic: 1
     - _MipmapBias: -2
     - _Mode: 1
     - _NPR: 0
@@ -121,7 +121,7 @@ Material:
     - _RoundCornerRadius: 0.25
     - _RoundCorners: 0
     - _RoundCornersHideInterior: 0
-    - _Smoothness: 1
+    - _Smoothness: 0.337
     - _SpecularHighlights: 1
     - _SphericalHarmonics: 0
     - _SrcBlend: 1
