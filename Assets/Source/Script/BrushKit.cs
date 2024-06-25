@@ -6,10 +6,9 @@ using UnityEngine.UI;
 using UnityEngine.ProBuilder;
 using System.Linq;
 using UnityEngine.ProBuilder.MeshOperations;
-using System.Drawing;
-using System.Security.Cryptography;
+
 public enum BrushTool { draw, extrude, cut, none };
-public enum DrawObject {point, Quad, Rectangle, none }
+public enum DrawObject {Point, Quad, Rectangle, Polygon ,none }
 public class BrushKit : MonoBehaviour
 {
     [SerializeField]
@@ -31,13 +30,14 @@ public class BrushKit : MonoBehaviour
     public Material QuadMaterial;
 
     ProBuilderMesh pbMesh;
-    List<Vector3> points = new List<Vector3>();
-
+    List<Vector3> vertices = new List<Vector3>();
+    List<int> indices = new List<int>();
 
     // Start is called before the first frame update
     void Start()
     {
         pbMesh = ProBuilderMesh.Create();
+        QuadMaterial = new Material(Shader.Find("Standard"));
         lastBrushTool = BrushTool.none;
         currentBrushTool = BrushTool.none;
     }
@@ -52,7 +52,7 @@ public class BrushKit : MonoBehaviour
             
             if(currentBrushTool == BrushTool.draw)
             {
-                //Draw a new object
+                
             }
             else if(currentBrushTool == BrushTool.extrude)
             {
@@ -72,29 +72,42 @@ public class BrushKit : MonoBehaviour
             lastBrushTool = currentBrushTool;
         }
 
+
+
         if (currentBrushTool == BrushTool.draw)
         {
-
-            if (points.Count == 2)
+            if (Input.GetMouseButtonDown(1))
             {
+                //Draw a new object
+                if (currentDrawObject == DrawObject.Point)
+                {
+                    Point point = new Point(vertices[vertices.Count - 1],pointPrefab);
+                    point.CreatePoint();
+                }
                 if (currentDrawObject == DrawObject.Quad)
                 {
-                    CreateQuad();
-
+                    Quad quad = new Quad(vertices);
+                    quad.CreateQuad();
                 }
                 else if (currentDrawObject == DrawObject.Rectangle)
                 {
-                    CreateRectangle();
+                    Rectangle rectangle = new Rectangle(vertices);
+                    rectangle.CreateRectangle();
 
+                }
+                else if (currentDrawObject == DrawObject.Polygon)
+                {
+                    Polygon polygon = new Polygon(vertices);
+                    polygon.CreatePolygon();
                 }
                 else
                 {
+                    //nothing
                 }
-
-
-
+                vertices.Clear();
             }
 
+            //selecting vertices!
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log("Mouse Clicked");
@@ -103,20 +116,15 @@ public class BrushKit : MonoBehaviour
                 {
                     Vector3 offset = new Vector3(0, 0.11f, 0);
                     Vector3 point_pos = hit.point - offset;
-                    // print the point position and it's index in points array
-                    Debug.Log("Point Index: " + points.Count + "Point Position: " + point_pos);
-                    points.Add(point_pos);
-                    pbMesh.ToMesh();
-                    pbMesh.Refresh();
-                    pbMesh.positions = points;
-
-                    Instantiate(pointPrefab, hit.point, Quaternion.identity);
-                    /*if (currentDrawObject == DrawObject.point)
-                    {
-                        Instantiate(pointPrefab, hit.point, Quaternion.identity);
-                    }*/
+                    // print the point position and it's index in vertices array
+                    Debug.Log("Point Index: " + vertices.Count + "Point Position: " + point_pos);
+                    vertices.Add(point_pos);
+                    
                 }
+                               
             }
+
+
 
         }
 
@@ -139,12 +147,6 @@ public class BrushKit : MonoBehaviour
         CutButton.onClick.AddListener(() => setCurrentBrushTool(BrushTool.cut));
 
     }
-    public void DrawConvex()
-    {
-        //create a loop that inserts vertices to vertices array. the inserted vertices are obtained by one click mouse position and stops when the player click spacebar
-        
-        Debug.Log("Draw Convex");
-    }
 
 
     // getter and setter for currentBrushTool
@@ -160,83 +162,9 @@ public class BrushKit : MonoBehaviour
 
 
     // ======================================== 
-    void CreateShape()
-    {
-        pbMesh.Clear(); // Clear previous shape
-        pbMesh.positions = points;
-        List<int> indices = new List<int>();
+   
 
-        // Create indices for the shape
-        for (int i = 0; i < points.Count; i++)
-        {
-            indices.Add(i);
-            indices.Add((i + 1) % points.Count); // Connect the last point to the first point
-        }
+    
 
-        // Create a face from the indices
-        pbMesh.faces = new List<Face> { new Face(indices.ToArray()) };
-        pbMesh.ToMesh();
-        pbMesh.Refresh();
-    }
-
-    void CreateQuad()
-    {
-        Debug.Log("Create Quad");
-        Vector3 point1 = points[0];
-        Vector3 point2 = points[1];
-
-        // Define the other two points to form a quad
-        Vector3 direction = point2 - point1;
-        Vector3 perpendicular = Vector3.Cross(direction, Vector3.up).normalized * direction.magnitude;
-
-        Vector3 point3 = point1 + perpendicular;
-        Vector3 point4 = point2 + perpendicular;
-
-        // Create a list of quad points
-        List<Vector3> quadPoints = new List<Vector3> { point1, point2, point4, point3 };
-
-        pbMesh.Clear(); // Clear previous shape
-        pbMesh.positions = quadPoints;
-        List<int> indices = new List<int>
-        {
-            2, 1, 0, // First triangle
-            0, 3, 2  // Second triangle
-        };
-
-        // Create a face from the indices
-        pbMesh.faces = new List<Face> { new Face(indices.ToArray()) };
-        pbMesh.SetMaterial(pbMesh.faces, QuadMaterial);
-        pbMesh.ToMesh();
-        pbMesh.Refresh();
-
-        points.Clear();
-    }
-
-    void CreateRectangle()
-    {
-        Debug.Log("Create Rectangle");
-        Vector3 point1 = points[0];
-        Vector3 point2 = new Vector3(point1.x, point1.y, points[1].z);
-        Vector3 point3 = points[1];
-        Vector3 point4 = new Vector3(points[1].x, points[1].y, point1.z);
-
-        // Create a list of rectangle points
-        List<Vector3> quadPoints = new List<Vector3> { point1, point2, point3, point4 };
-
-        pbMesh.Clear(); // Clear previous shape
-        pbMesh.positions = quadPoints;
-        List<int> indices = new List<int>
-        {
-            2, 1, 0, // First triangle
-            0, 3, 2  // Second triangle
-        };
-
-        // Create a face from the indices
-        pbMesh.faces = new List<Face> { new Face(indices.ToArray()) };
-        pbMesh.ToMesh();
-        pbMesh.Refresh();
-
-        points.Clear();
-
-    }
+    
 }
