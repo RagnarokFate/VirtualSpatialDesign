@@ -121,7 +121,12 @@ public class BrushKit : MonoBehaviour
                     vertices.Add(point_pos);
                     
                 }
-                               
+                if (vertices.Count > 3 && currentDrawObject == DrawObject.Polygon)
+                {
+                    Polygon polygon = new Polygon(vertices);
+                    polygon.CreatePolygon();
+                }
+
             }
 
 
@@ -130,7 +135,29 @@ public class BrushKit : MonoBehaviour
 
         if (currentBrushTool == BrushTool.extrude)
         {
-
+            // select a face
+            if (Input.GetMouseButtonDown(0))
+            {
+                //Extrude a selected object
+            }
+            // apply extrusion via right click
+            if (Input.GetMouseButtonDown(1))
+            {
+                //Extrude a selected object
+            }
+        }
+        if (currentBrushTool == BrushTool.cut)
+        {
+            // select a face
+            if (Input.GetMouseButtonDown(0))
+            {
+                //Cut a selected object
+            }
+            // apply extrusion via right click
+            if (Input.GetMouseButtonDown(1))
+            {
+                //Cut a selected object
+            }
         }
 
     }
