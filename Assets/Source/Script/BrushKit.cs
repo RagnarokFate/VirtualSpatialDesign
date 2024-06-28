@@ -28,7 +28,7 @@ public class BrushKit : MonoBehaviour
 
     public GameObject pointPrefab;
     public Material QuadMaterial;
-
+    private DrawLine drawLine;
     ProBuilderMesh pbMesh;
     List<Vector3> vertices = new List<Vector3>();
     List<int> indices = new List<int>();
@@ -36,6 +36,9 @@ public class BrushKit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject drawLineObject = new GameObject("DrawLineObject");
+        drawLine = drawLineObject.AddComponent<DrawLine>();
+
         pbMesh = ProBuilderMesh.Create();
         QuadMaterial = new Material(Shader.Find("Standard"));
         lastBrushTool = BrushTool.none;
@@ -104,7 +107,9 @@ public class BrushKit : MonoBehaviour
                 {
                     //nothing
                 }
+                drawLine.DestroyLine();
                 vertices.Clear();
+
             }
 
             //selecting vertices!
@@ -119,14 +124,10 @@ public class BrushKit : MonoBehaviour
                     // print the point position and it's index in vertices array
                     Debug.Log("Point Index: " + vertices.Count + "Point Position: " + point_pos);
                     vertices.Add(point_pos);
-                    
-                }
-                if (vertices.Count > 3 && currentDrawObject == DrawObject.Polygon)
-                {
-                    Polygon polygon = new Polygon(vertices);
-                    polygon.CreatePolygon();
-                }
 
+                    drawLine.UpdateLine(point_pos);
+                }
+                               
             }
 
 
