@@ -9,6 +9,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public enum BrushTool { draw, extrude, cut, none };
 public enum DrawObject {Point, Quad, Rectangle, Polygon ,none }
+
 public class BrushKit : MonoBehaviour
 {
     [SerializeField]
@@ -31,7 +32,8 @@ public class BrushKit : MonoBehaviour
     private DrawLine drawLine;
     ProBuilderMesh pbMesh;
     List<Vector3> vertices = new List<Vector3>();
-    List<int> indices = new List<int>();
+
+    List<Vector3> centers = new List<Vector3>();
 
     // Start is called before the first frame update
     void Start()
@@ -81,32 +83,41 @@ public class BrushKit : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(1))
             {
+                GameObject gameObject = new GameObject();
+                Vector3 centerVertex = new Vector3(0, 0, 0);
                 //Draw a new object
                 if (currentDrawObject == DrawObject.Point)
                 {
                     Point point = new Point(vertices[vertices.Count - 1],pointPrefab);
-                    point.CreatePoint();
+                    gameObject = point.CreatePoint();
                 }
                 if (currentDrawObject == DrawObject.Quad)
                 {
                     Quad quad = new Quad(vertices);
-                    quad.CreateQuad();
+                    gameObject = quad.CreateQuad();
                 }
                 else if (currentDrawObject == DrawObject.Rectangle)
                 {
                     Rectangle rectangle = new Rectangle(vertices);
-                    rectangle.CreateRectangle();
+                    gameObject = rectangle.CreateRectangle();
 
                 }
                 else if (currentDrawObject == DrawObject.Polygon)
                 {
                     Polygon polygon = new Polygon(vertices);
-                    polygon.CreatePolygon();
+                    gameObject = polygon.CreatePolygon();
                 }
                 else
                 {
                     //nothing
                 }
+                // COMPONENTS TO ADD TO THE OBJECT WITH DEFAULT VALUES
+                // AddRigidBody(gameObject);
+                // AddCollider(gameObject);
+                MeshUtils meshUtils = new MeshUtils(gameObject);
+                centerVertex = meshUtils.GetCenter();
+                centers.Add(centerVertex);
+                GameObjectsSingleton.Instance.AddGameObject(gameObject);
                 drawLine.DestroyLine();
                 vertices.Clear();
 
@@ -136,10 +147,39 @@ public class BrushKit : MonoBehaviour
 
         if (currentBrushTool == BrushTool.extrude)
         {
-            // select a face
+            Debug.Log("Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)");
+            SelectingObject currentSelectingObject = SelectingObject.none;
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                Debug.Log("Vertix Selected");
+                currentSelectingObject = SelectingObject.Vertex;
+
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("Edge Selected");
+                currentSelectingObject = SelectingObject.Edge;
+            }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Debug.Log("Face Selected");
+                currentSelectingObject = SelectingObject.Face;
+            }
+
+            // select a SelectingObject from the object
             if (Input.GetMouseButtonDown(0))
             {
-                //Extrude a selected object
+                Debug.Log("Mouse Clicked - Extrude");
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    Vector3 offset = new Vector3(0, 0.11f, 0);
+                    Vector3 point_pos = hit.point - offset;
+                    // print the point position and it's index in vertices array
+                    Debug.Log("Point Position: " + point_pos + "in Extrude Operation");
+                    
+
+                }
             }
             // apply extrusion via right click
             if (Input.GetMouseButtonDown(1))
@@ -190,9 +230,31 @@ public class BrushKit : MonoBehaviour
 
 
     // ======================================== 
-   
 
-    
+    //default add rigid body to the object
+    public void AddRigidBody(GameObject gameObject)
+    {
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.mass = 1.0f;
+        rb.drag = 0.1f;
+        rb.angularDrag = 0.05f;
+        rb.useGravity = false;
+        rb.isKinematic = false;
 
-    
+        
+
+        //print the center of mass of the object
+        Debug.Log("Center of Mass: " + rb.centerOfMass);
+        // NOTE : The center of mass is the point at which the object is ZERO!.
+    }
+
+    //default add collider to the object
+    public void AddCollider(GameObject gameObject)
+    {
+        MeshCollider meshCollider = gameObject.AddComponent<MeshCollider>();
+        meshCollider.convex = true;
+    }
+
+
+
 }

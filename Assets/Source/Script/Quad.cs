@@ -49,7 +49,10 @@ public class Quad
         List<int> indices = new List<int>
         {
             2, 1, 0, // First triangle
-            0, 3, 2  // Second triangle
+            0, 3, 2,  // Second triangle
+            0, 1, 2,  // Third triangle
+            2, 3, 0   // Fourth triangle
+
         };
 
         // Create a face from the indices

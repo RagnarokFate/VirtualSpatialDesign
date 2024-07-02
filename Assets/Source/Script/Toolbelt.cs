@@ -57,6 +57,7 @@ public class ToolBelt : MonoBehaviour
             {
                 brushKitLayout.enabled = false;
                 //Operating A Game Object Selection
+                List<GameObject> allGameObjects = GameObjectsSingleton.Instance.GetGameObjects();
 
             }
             else if(currentTool == Tool.deselect)

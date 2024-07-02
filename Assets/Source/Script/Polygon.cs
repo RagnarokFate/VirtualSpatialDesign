@@ -46,10 +46,15 @@ public class Polygon
         List<int> indices = new List<int>();
         for (int i = 0; i < vertices.Count; i++)
         {
+            // front face
             indices.Add(0);
             indices.Add(i % vertices.Count);
             indices.Add((i + 1) % vertices.Count);
 
+            // back face
+            indices.Add((i + 1) % vertices.Count);
+            indices.Add(i % vertices.Count);
+            indices.Add(0);
         }
         pbMesh.faces = new List<Face> { new Face(indices.ToArray()) };
         pbMesh.ToMesh();
