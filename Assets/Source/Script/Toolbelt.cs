@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,13 +8,9 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.UI;
 
-
-public enum Tool { select, deselect, grasp, rotate, scale, brush, delete, none };
-
-
 public class ToolBelt : MonoBehaviour
 {
-    [SerializeField]
+    //[SerializeField]
     private Tool currentTool = Tool.none;
     private Tool lastTool = Tool.none;
 
@@ -26,8 +23,12 @@ public class ToolBelt : MonoBehaviour
     public Button brushButton;
     public Button deleteButton;
 
-    [SerializeField]
     private Canvas brushKitLayout;
+
+
+    //function profiles
+    public UserSelection userSelection = new UserSelection();
+    public UserDeselection userDeselection;
 
     // Start is called before the first frame update
     void Start()
@@ -42,28 +43,22 @@ public class ToolBelt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Tool currentTool = getCurrentTool();
+        // one message only for each tool
         if (currentTool != lastTool)
         {
             Debug.Log("Current Tool: " + currentTool);
-            // find the nearby object clicked from the mouse position aka input
 
-
-            // NEW TOOL
-            /*Vector3 mousePosition = Input.mousePosition;
-            Debug.Log("Mouse Position: " + mousePosition);*/
-            // if the current tool is brush
             if (currentTool == Tool.select)
             {
                 brushKitLayout.enabled = false;
-                //Operating A Game Object Selection
-                List<GameObject> allGameObjects = GameObjectsSingleton.Instance.GetGameObjects();
 
             }
-            else if(currentTool == Tool.deselect)
+            else if (currentTool == Tool.deselect)
             {
                 brushKitLayout.enabled = false;
                 //Operating A Game Object Deselection
+
+
             }
             else if (currentTool == Tool.grasp)
             {
@@ -88,16 +83,20 @@ public class ToolBelt : MonoBehaviour
                 //there is a canvas of name "BrushKitLayout" which contains all the brush tools like draw, extrude, bevel, cut. set it visible to true
                 brushKitLayout.enabled = true;
 
-            }                
+            }
 
+
+            // find the nearby object clicked from the mouse position aka input
             lastTool = currentTool;
-            
+            GameManager.Instance.SetActiveTool(currentTool);
+            GameManager.Instance.SetActiveBrushTool(BrushTool.none);
         }
+        processToolSwitch();
 
     }
 
 
-   
+
 
     // create a function that check if which button is clicked lastly
     public void OnEnable()
@@ -131,7 +130,76 @@ public class ToolBelt : MonoBehaviour
     {
         currentTool = tool;
     }
-    
+
+
+    public void processToolSwitch()
+    {
+        
+        // if the current tool is brush
+        if (currentTool == Tool.select)
+        {
+            
+            Vector2 mousePosition = Input.mousePosition;
+            //Debug.Log("Mouse Position: " + mousePosition);
+            // Vector3 worldPosition = ConvertScreenPointToPhysicWorld(mousePosition);
+            // Debug.Log("World Position: " + worldPosition);
+
+            userSelection.setUpdatedMousePosition(mousePosition);
+            userSelection.HandleHighlight();
+            userSelection.HandleSelection();
+
+        }
+        else if (currentTool == Tool.deselect)
+        {
+            brushKitLayout.enabled = false;
+            //Operating A Game Object Deselection
+            UserDeselection userDeselection = new UserDeselection();
+            userDeselection.HandleDeselection();
+
+
+        }
+        else if (currentTool == Tool.grasp)
+        {
+            brushKitLayout.enabled = false;
+            //Operating A Game Object Grasp
+        }
+        else if (currentTool == Tool.rotate)
+        {
+            brushKitLayout.enabled = false;
+            //Operating A Game Object Rotation
+        }
+        else if (currentTool == Tool.scale)
+        {
+            brushKitLayout.enabled = false;
+            //Operating A Game Object Scaling
+        }
+        else
+        if (currentTool == Tool.brush)
+        {
+            //Operating A Game Object Manipulation
+            //set Brush tools visible to true
+            //there is a canvas of name "BrushKitLayout" which contains all the brush tools like draw, extrude, bevel, cut. set it visible to true
+            brushKitLayout.enabled = true;
+
+        }
+
+
+    }
+
+
+    public Vector3 ConvertScreenPointToPhysicWorld(Vector2 mousePosition)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            return hit.point;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
+    }
+        
 }
 
 
