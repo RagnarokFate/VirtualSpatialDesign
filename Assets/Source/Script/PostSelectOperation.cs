@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum SelectingObject { Vertex, Edge, Face, none };
+public enum SelectingMode { Vertex, Edge, Face, none };
 
 
-public class SelectOperation
+public class PostSelectOperation
 {
-    SelectingObject selectingObject = SelectingObject.none;
+    SelectingMode selectingObject = SelectingMode.none;
     float threshold = 0.1f;
     Vector3 mousePosition;
 
@@ -21,7 +21,7 @@ public class SelectOperation
     List<Vector3> faces;
 
 
-    public SelectOperation(float threshold, Vector3 MousePosition)
+    public PostSelectOperation(float threshold, Vector3 MousePosition)
     {
         this.threshold = threshold;
         this.mousePosition = MousePosition;
@@ -38,14 +38,14 @@ public class SelectOperation
         this.faces = faces;
     }
 
-    public void setOperationType(SelectingObject selectingObject)
+    public void setOperationType(SelectingMode selectingObject)
     {
         this.selectingObject = selectingObject;
     }
 
     public Vector3 GetVertex()
     {
-        if (selectingObject == SelectingObject.Vertex)
+        if (selectingObject == SelectingMode.Vertex)
         {
             foreach (Vector3 vertex in vertices)
             {
@@ -61,7 +61,7 @@ public class SelectOperation
 
     public Vector2 GetEdge()
     {
-        if (selectingObject == SelectingObject.Edge)
+        if (selectingObject == SelectingMode.Edge)
         {
             foreach (Vector2 edge in edges)
             {
@@ -77,7 +77,7 @@ public class SelectOperation
 
     public Vector3 GetFace()
     {
-        if (selectingObject == SelectingObject.Face)
+        if (selectingObject == SelectingMode.Face)
         {
             foreach (Vector3 face in faces)
             {
@@ -100,17 +100,17 @@ public class SelectOperation
 
     public void setSelection()
     {
-        if (selectingObject == SelectingObject.Vertex)
+        if (selectingObject == SelectingMode.Vertex)
         {
             selectedVertex = GetVertex();
         }
 
-        if (selectingObject == SelectingObject.Edge)
+        if (selectingObject == SelectingMode.Edge)
         {
             selectedEdge = GetEdge();
         }
 
-        if (selectingObject == SelectingObject.Face)
+        if (selectingObject == SelectingMode.Face)
         {
             selectedFace = GetFace();
         }
@@ -119,17 +119,17 @@ public class SelectOperation
 
     public void PrintSelection()
     {
-        if (selectingObject == SelectingObject.Vertex)
+        if (selectingObject == SelectingMode.Vertex)
         {
             Debug.Log("Selected Vertex: " + selectedVertex);
         }
 
-        if (selectingObject == SelectingObject.Edge)
+        if (selectingObject == SelectingMode.Edge)
         {
             Debug.Log("Selected Edge: " + selectedEdge);
         }
 
-        if (selectingObject == SelectingObject.Face)
+        if (selectingObject == SelectingMode.Face)
         {
             Debug.Log("Selected Face: " + selectedFace);
         }
