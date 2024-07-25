@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 
 //class that will manage the game objects and tools and data
@@ -49,6 +50,9 @@ public class GameManager : MonoBehaviour
     // Active game object
     public GameObject activeGameObject;
 
+    // Active ProBuilder Object
+    public ProBuilderMesh activeProBuilderObject;
+
     // Active tool (Assuming Tool is a class you've defined)
     public Tool activeTool;
     public BrushTool activeBrushKit;
@@ -74,6 +78,11 @@ public class GameManager : MonoBehaviour
     public void SetActiveBrushTool(BrushTool brushKit)
     {
         activeBrushKit = brushKit;
+    }
+
+    public void SetActiveProBuilderObject(ProBuilderMesh proBuilderObject)
+    {
+        activeProBuilderObject = proBuilderObject;
     }
 
     public void AddGameObject(GameObject obj)

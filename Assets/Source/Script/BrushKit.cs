@@ -121,6 +121,7 @@ public class BrushKit : MonoBehaviour
             {
                 GameObject gameObject = new GameObject();
                 Vector3 centerVertex = new Vector3(0, 0, 0);
+                ProBuilderMesh pbMesh = ProBuilderMesh.Create();
                 //Draw a new object
                 if (currentDrawObject == DrawObject.Point)
                 {
@@ -141,7 +142,10 @@ public class BrushKit : MonoBehaviour
                 else if (currentDrawObject == DrawObject.Polygon)
                 {
                     Polygon polygon = new Polygon(vertices);
-                    gameObject = polygon.CreatePolygon();
+                    // gameObject = polygon.CreatePolygon();
+                    pbMesh = polygon.CreatePolygonProBuilder();
+                    gameObject = pbMesh.gameObject;
+                    GameManager.Instance.SetActiveProBuilderObject(pbMesh);
                 }
                 else
                 {
@@ -149,13 +153,9 @@ public class BrushKit : MonoBehaviour
                 }
                 // COMPONENTS TO ADD TO THE OBJECT WITH DEFAULT VALUES
                 // AddRigidBody(gameObject);
-                AddCollider(gameObject);
+                // AddCollider(gameObject);
                 //make the last created object as active game object in gamemanger singlton class
                 GameManager.Instance.SetActiveGameObject(gameObject);
-                // UPDATED : PRE-PROCESSING THE GAME OBJECT 
-                /*MeshUtils meshUtils = new MeshUtils(gameObject);
-                centerVertex = meshUtils.GetCenter();
-                centers.Add(centerVertex);*/
                 // ADDING A TAG SELECTABLE TO THE OBJECT
                 gameObject.tag = "Selectable";
                 GameManager.Instance.AddGameObject(gameObject);
@@ -200,21 +200,10 @@ public class BrushKit : MonoBehaviour
             SelectingMode currentSelectingMode = HandleExtrudeMode();
 
 
-
+            // select a vertix
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Mouse Clicked - Extrude");
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    Vector3 offset = new Vector3(0, 0.11f, 0);
-                    Vector3 point_pos = hit.point - offset;
-                    // print the point position and it's index in vertices array
-                    Debug.Log("Point Position: " + point_pos + "in Extrude Operation");
-
-                    // find the cloest object to the point_pos - TODO
-                    // GameObject selectedObject = GameObjectsSingleton.Instance.GetClosestObject(point_pos);
-                }
+                ExtrudeFaces();
             }
             // apply extrusion via right click
             if (Input.GetMouseButtonDown(1))
@@ -298,7 +287,6 @@ public class BrushKit : MonoBehaviour
         {
             Debug.Log("Face Selected");
             currentSelectingMode = SelectingMode.Face;
-            ExtrudeFaces();
 
 
         }
@@ -340,14 +328,14 @@ public class BrushKit : MonoBehaviour
         var faces = pbMesh.faces;
 
         // Define the extrude distance
-        float extrudeDistance = 10.0f;
+        float extrudeDistance = 100.0f;
 
         // Perform extrusion
         pbMesh.Extrude(faces, ExtrudeMethod.FaceNormal, extrudeDistance);
 
         // Refresh the mesh to apply changes
         pbMesh.ToMesh();
-        pbMesh.Refresh(RefreshMask.All);
+        pbMesh.Refresh();
     }
 
 
