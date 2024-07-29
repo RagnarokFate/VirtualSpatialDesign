@@ -76,6 +76,9 @@ public class UserDrawment
             // gameObject = polygon.CreatePolygon();
             gameObject = pbMesh.gameObject;
             gameObject.name += " " + GameManager.Instance.gameObjectList.Count.ToString();
+            gameObject.tag = "Selectable";
+            gameObject.AddComponent<MeshCollider>();
+
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveProBuilderObject(pbMesh);
             GameManager.Instance.SetActiveGameObject(gameObject);

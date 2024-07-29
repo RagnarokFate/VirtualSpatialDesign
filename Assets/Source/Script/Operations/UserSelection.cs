@@ -1,39 +1,95 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 
 public enum status { Selection, Hightlight, None }
 public class UserSelection
 {
-   
-    public UserSelection()
+    private Material highlightMaterial;
+    private Material selectionMaterial;
+
+    private Material defaultMaterial;
+
+    private GameObject selectedObject;
+    private GameObject highlightedObject;
+
+    public UserSelection(Material highlightInputMaterial, Material selectionInputMaterial)
     {
+        highlightMaterial = highlightInputMaterial;
+        selectionMaterial = selectionInputMaterial;
+        defaultMaterial = new Material(Shader.Find("Standard"));
     }
+
+    // Add these fields to store the default material of the highlighted and selected objects separately
+    private Material highlightedObjectDefaultMaterial;
+    private Material selectedObjectDefaultMaterial;
 
     public void HandleSelection()
     {
-        if (Input.GetMouseButtonDown(0))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit))
         {
-            Debug.Log("Left Mouse Clicked");
-            if (EventSystem.current.IsPointerOverGameObject())
+            Debug.Log("Mouse Clicked at pos: " + hit.point.ToString());
+
+            if (selectedObject != null)
             {
-                Debug.Log("Clicked on the UI");
-                return;
+                // Restore the default material of the previously selected object
+                selectedObject.GetComponent<MeshRenderer>().material = selectedObjectDefaultMaterial;
             }
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+
+            if (highlightedObject != null)
             {
-                Debug.Log("Hit Object : " + hit.collider.gameObject.name);
-                //GameManager.Instance.SetActiveGameObject(hit.collider.gameObject);
+                // Select the highlighted object
+                selectedObject = hit.collider.gameObject;
+                if (selectedObject.GetComponent<MeshRenderer>().material != selectionMaterial)
+                {
+                    Debug.Log("Selected object : " + selectedObject.name);
+
+                    // Store the default material of the selected object
+                    selectedObjectDefaultMaterial = selectedObject.GetComponent<MeshRenderer>().sharedMaterial;
+                    selectedObject.GetComponent<MeshRenderer>().material = selectionMaterial;
+                }
+                highlightedObject = null;
             }
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log("Right Mouse Clicked");
+            else
+            {
+                // If no object is highlighted, just deselect the current object
+                selectedObject = null;
+            }
         }
     }
+
+    public void HandleHighlight()
+    {
+        if (highlightedObject != null)
+        {
+            // Restore the default material of the previously highlighted object
+            highlightedObject.GetComponent<MeshRenderer>().sharedMaterial = highlightedObjectDefaultMaterial;
+            highlightedObject = null;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit))
+        {
+            highlightedObject = hit.collider.gameObject;
+            if (highlightedObject.CompareTag("Selectable"))
+            {
+                // Store the default material of the highlighted object
+                highlightedObjectDefaultMaterial = highlightedObject.GetComponent<MeshRenderer>().sharedMaterial;
+                highlightedObject.GetComponent<MeshRenderer>().material = highlightMaterial;
+            }
+            else
+            {
+                highlightedObject = null;
+            }
+        }
+    }
+
 
 
 }

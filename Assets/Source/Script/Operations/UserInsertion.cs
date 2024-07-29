@@ -9,7 +9,7 @@ public enum Shape3DType { Arch, Cone, Cube, Cylinder, Pipe, Plane, Sphere , Spri
 
 public class UserInsertion
 {
-	public Shape3DType shapeType;
+	public Shape3DType shapeType = Shape3DType.Cube;
 	public Vector3 PivotPoint;
 
     ProBuilderMesh pbMesh;
@@ -23,7 +23,7 @@ public class UserInsertion
         }
         catch (System.Exception)
         {
-            Debug.LogError("Quads parent GameObject not found in the scene. Please create one and name it 'Quads'.");
+            Debug.LogError("Meshs parent GameObject not found in the scene. Please create one and name it 'Meshs'.");
             throw;
         }
     }
@@ -92,10 +92,16 @@ public class UserInsertion
 
             pbMesh.transform.parent = MeshParent.transform;
             pbMesh.transform.position = meshPosition;
-
+            
+            
             // gameObject = polygon.CreatePolygon();
             GameObject gameObject = pbMesh.gameObject;
+            gameObject.tag = "Selectable";
             gameObject.name += " " + GameManager.Instance.gameObjectList.Count.ToString();
+
+            gameObject.AddComponent<MeshCollider>();
+
+
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveProBuilderObject(pbMesh);
             GameManager.Instance.SetActiveGameObject(gameObject);

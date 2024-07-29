@@ -27,9 +27,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private DrawObject drawObject = DrawObject.Polygon;
     [SerializeField]
-    private Shape3DType shapeType = Shape3DType.None;
+    private Shape3DType shapeType = Shape3DType.Cube;
     static List<Vector3> vertices = new List<Vector3>();
 
+    public Material highlightMaterial;
+    public Material selectionMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +39,7 @@ public class MainMenu : MonoBehaviour
         GameObject drawLineObject = new GameObject("DrawLineObject");
         drawLine = drawLineObject.AddComponent<DrawLine>();
 
-        userSelection = new UserSelection();
+        userSelection = new UserSelection(highlightMaterial, selectionMaterial);
         userDeselection = new UserDeselection();
         userDrawment = new UserDrawment();
         userInsertion = new UserInsertion();
@@ -100,6 +102,8 @@ public class MainMenu : MonoBehaviour
         if (currentMainTool == MainTool.select)
         {
             // select tool is enabled
+            userSelection.HandleHighlight();
+            userSelection.HandleSelection();
 
         }
         else if (currentMainTool == MainTool.deselect)
