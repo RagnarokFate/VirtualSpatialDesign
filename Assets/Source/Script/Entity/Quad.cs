@@ -27,10 +27,9 @@ public class Quad
         }
     }
 
-    public GameObject CreateQuad()
+
+    private (List<Vector3>, List<Face>) GetVerticesAndIndices()
     {
-        Debug.Log("Create Quad");
-        GameObject gameObject = new GameObject("Quad");
         Vector3 point1 = vertices[0];
         Vector3 point2 = vertices[1];
 
@@ -44,8 +43,7 @@ public class Quad
         // Create a list of quad points
         List<Vector3> quadPoints = new List<Vector3> { point1, point2, point4, point3 };
 
-        pbMesh.Clear(); // Clear previous shape
-        pbMesh.positions = quadPoints;
+        // Create a list of rectangle points
         List<int> indices = new List<int>
         {
             2, 1, 0, // First triangle
@@ -55,21 +53,37 @@ public class Quad
 
         };
 
-        // Create a face from the indices
-        pbMesh.faces = new List<Face> { new Face(indices.ToArray()) };
-        pbMesh.ToMesh();
-        pbMesh.Refresh();
+        List<Face> faces = new List<Face> { new Face(indices.ToArray()) };
+        return (quadPoints, faces);
+    }
 
-        vertices.Clear();
 
-        // Assign the ProBuilder mesh to the GameObject's MeshFilter and MeshRenderer
-        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-        MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+    public ProBuilderMesh CreateQuadProBuilder()
+    {
+        List<Face> faces = new List<Face>();
 
-        meshFilter.sharedMesh = pbMesh.GetComponent<MeshFilter>().sharedMesh;
-        meshRenderer.sharedMaterial = QuadMaterial;
+        (vertices, faces) = GetVerticesAndIndices();
 
-        gameObject.gameObject.transform.parent = QuadParent.transform;
-        return gameObject;
+        ProBuilderMesh proBuilderMesh = ProBuilderMesh.Create();
+        proBuilderMesh.Clear();
+
+        proBuilderMesh.positions = vertices;
+        proBuilderMesh.faces = faces;
+
+        proBuilderMesh.GetComponent<MeshRenderer>().material = QuadMaterial;
+        //proBuilderMesh.GetComponent<MeshRenderer>().material.color = Color.red;
+
+        proBuilderMesh.ToMesh();
+        proBuilderMesh.Refresh();
+
+        proBuilderMesh.gameObject.transform.parent = QuadParent.transform;
+
+        //setting default values for the mesh
+        proBuilderMesh.selectable = true;
+        proBuilderMesh.userCollisions = true;
+        proBuilderMesh.name = "Quad";
+
+
+        return proBuilderMesh;
     }
 }

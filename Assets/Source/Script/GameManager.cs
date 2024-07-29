@@ -49,14 +49,18 @@ public class GameManager : MonoBehaviour
 
     // Active game object
     public GameObject activeGameObject;
+    public int activeGameObjectIndex;
 
     // Active ProBuilder Object
     public ProBuilderMesh activeProBuilderObject;
 
     // Active tool (Assuming Tool is a class you've defined)
-    public Tool activeTool;
-    public BrushTool activeBrushKit;
+    public MainTool currentMainTool;
+    public TransformTool currentTransformTool;
+    public BrushTool currentBrushTool; // push pull, extrude, etc.
 
+    public int twoD_Counter;
+    public int threeD_Counter;
 
     //setting default values for drawline
     public Color drawLineColor;
@@ -65,25 +69,7 @@ public class GameManager : MonoBehaviour
 
 
     // Methods to manipulate the game objects, tools, etc.
-    public void SetActiveGameObject(GameObject gameObject)
-    {
-        activeGameObject = gameObject;
-    }
-
-    public void SetActiveTool(Tool tool)
-    {
-        activeTool = tool;
-    }
-
-    public void SetActiveBrushTool(BrushTool brushKit)
-    {
-        activeBrushKit = brushKit;
-    }
-
-    public void SetActiveProBuilderObject(ProBuilderMesh proBuilderObject)
-    {
-        activeProBuilderObject = proBuilderObject;
-    }
+    
 
     public void AddGameObject(GameObject obj)
     {
@@ -98,6 +84,39 @@ public class GameManager : MonoBehaviour
     {
         return new List<GameObject>(gameObjectList);
     }
+
+    // =====================================================================================================================
+    // Getter and Setter
+    public void SetActiveGameObject(GameObject gameObject)
+    {
+        activeGameObject = gameObject;
+    }
+    public void setActiveGameObjectIndex(int index)
+    {
+        activeGameObjectIndex = index;
+    }
+
+    public void SetActiveProBuilderObject(ProBuilderMesh proBuilderObject)
+    {
+        activeProBuilderObject = proBuilderObject;
+    }
+
+    public void SetCurrentMainTool(MainTool tool)
+    {
+        currentMainTool = tool;
+    }
+
+    public void SetCurrentTransformTool(TransformTool tool)
+    {
+        currentTransformTool = tool;
+    }
+
+    public void SetCurrentBrushTool(BrushTool brushKit)
+    {
+        currentBrushTool = brushKit;
+    }
+
+    
 
 
     // GetClosestObject creted to get the closest object to the mouse position

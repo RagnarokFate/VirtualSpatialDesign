@@ -5,14 +5,9 @@ using UnityEngine;
 
 public class UserDeselection
 {
-    public Material selectionMaterial;
-
-    private Material originalMaterialSelection;
-
-    public Transform selection;
-
-    public RaycastHit raycastHit;
-
+    public UserDeselection()
+    {
+    }
 
     //reset back object color upon deselecting/unclicking Active GameObject
     public void HandleDeselection()
