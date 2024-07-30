@@ -27,6 +27,7 @@ public class ToolBelt : MonoBehaviour
     //function profiles - Transformation ToolBar
     public UserGrasp userGrasp;
     public UserRotation userRotation;
+    public UserScale userScale;
     // Start is called before the first frame update
     void Start()
     {
@@ -102,13 +103,16 @@ public class ToolBelt : MonoBehaviour
                 //Operating A Game Object Rotation
                 Debug.Log("Rotate Tranformation");
                 userRotation = new UserRotation();
-                userRotation.unlockRotation();
+                userRotation.UnlockRotation();
 
             }
             else if (currentTransformTool == TransformTool.scale)
             {
                 //Operating A Game Object Scaling
                 Debug.Log("Scale Tranformation");
+                userScale = new UserScale();
+                userScale.UnlockScale();
+
 
             }
             else if (currentTransformTool == TransformTool.delete)
@@ -147,6 +151,10 @@ public class ToolBelt : MonoBehaviour
         else if (currentTransformTool == TransformTool.scale)
         {
             //Operating A Game Object Scaling
+            if (userScale.meshScaleLock == false)
+            {
+                userScale.HandleUserScale();
+            }
         }
         else if (currentTransformTool == TransformTool.delete)
         {

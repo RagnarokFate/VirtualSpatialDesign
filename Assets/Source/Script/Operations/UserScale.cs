@@ -3,28 +3,27 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UserRotation
+public class UserScale
 {
     private bool locked;
     private AxisLock axisLock;
     private Vector2 initialMousePos;
-    private Quaternion initialRotation;
-    private bool isRotating;
+    private Vector3 initialScale;
+    private bool isScaling;
 
-    public bool meshRotationLock;
-    public float rotationSensitivity = 0.1f;
+    public bool meshScaleLock;
 
-
-    public UserRotation()
+    public float scaleSensitivity = 0.01f;
+    public UserScale()
     {
-        meshRotationLock = false;
+        meshScaleLock = false;
         locked = false;
         axisLock = AxisLock.none;
-        isRotating = false;
+        isScaling = false;
     }
 
     // Reset back object color upon deselecting/unclicking Active GameObject
-    public void HandleUserRotation()
+    public void HandleUserScale()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
         GameManager.Instance.currentBrushTool = BrushTool.none;
@@ -33,46 +32,47 @@ public class UserRotation
         if (gameObject != null)
         {
             Vector2 mousePos = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if (Input.GetMouseButtonDown(0)) // Start rotation on mouse down
+                if (Input.GetMouseButtonDown(0)) // Start scaling on mouse down
                 {
                     initialMousePos = mousePos;
-                    initialRotation = gameObject.transform.rotation;
-                    isRotating = true;
+                    initialScale = gameObject.transform.localScale;
+                    isScaling = true;
                 }
 
-                if (Input.GetMouseButton(0) && isRotating) // Continue rotation while holding mouse button
+                if (Input.GetMouseButton(0) && isScaling) // Continue scaling while holding mouse button
                 {
                     Vector2 mouseDelta = mousePos - initialMousePos;
-                    float rotationAngle = mouseDelta.magnitude * rotationSensitivity; // Adjust rotation sensitivity
+                    float mouseMagnitude = mouseDelta.magnitude;
+                    // float mouseMagnitude = (mouseDelta.magnitude > 0) ? -mouseDelta.magnitude : mouseDelta.magnitude;
+                    float scaleFactor = 1 + mouseMagnitude * scaleSensitivity; // Adjust scaling sensitivity
 
-                    Vector3 rotationAxis = Vector3.zero;
-
+                    Vector3 scale = initialScale;
                     if (axisLock == AxisLock.none)
                     {
-                        rotationAxis = new Vector3(mouseDelta.y, -mouseDelta.x, 0);
+                        scale = initialScale * scaleFactor;
                     }
                     else if (axisLock == AxisLock.X_Axis)
                     {
-                        rotationAxis = Vector3.right;
+                        scale.x = initialScale.x * scaleFactor;
                     }
                     else if (axisLock == AxisLock.Y_Axis)
                     {
-                        rotationAxis = Vector3.up;
+                        scale.y = initialScale.y * scaleFactor;
                     }
                     else if (axisLock == AxisLock.Z_Axis)
                     {
-                        rotationAxis = Vector3.forward;
+                        scale.z = initialScale.z * scaleFactor;
                     }
 
-                    gameObject.transform.rotation = initialRotation * Quaternion.AngleAxis(rotationAngle, rotationAxis);
+                    gameObject.transform.localScale = scale;
                 }
 
-                if (Input.GetMouseButtonUp(0)) // Stop rotation on mouse up
+                if (Input.GetMouseButtonUp(0)) // Stop scaling on mouse up
                 {
-                    isRotating = false;
+                    isScaling = false;
                 }
             }
         }
@@ -97,13 +97,16 @@ public class UserRotation
         }
     }
 
-    public void LockRotation()
+    public void LockScale()
     {
-        meshRotationLock = true;
+        meshScaleLock = true;
     }
 
-    public void UnlockRotation()
+    public void UnlockScale()
     {
-        meshRotationLock = false;
+        meshScaleLock = false;
     }
 }
+
+
+

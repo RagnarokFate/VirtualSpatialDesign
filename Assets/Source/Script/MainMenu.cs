@@ -71,13 +71,13 @@ public class MainMenu : MonoBehaviour
             }
             else if(currentMainTool == MainTool.insert)
             {
-                Debug.Log("Insert Tool is enabled");
+                Debug.Log("2D Insert Tool is enabled");
                 // insert 3d objects presents of probuilder to scene
 
             }
             else if(currentMainTool == MainTool.draw)
             {
-                Debug.Log("Draw Tool is enabled");
+                Debug.Log("2D Draw Tool is enabled");
                 // draw 2d objects presents of probuilder to scene
             }
             else
@@ -119,6 +119,7 @@ public class MainMenu : MonoBehaviour
         else if (currentMainTool == MainTool.deselect)
         {
             // deselect tool is enabled
+            userDeselection.HandleDeselection();
         }
         else if (currentMainTool == MainTool.insert)
         {
