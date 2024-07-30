@@ -47,6 +47,10 @@ public class UserInsertion
             {
                 meshPosition = hit.point;
             }
+            else
+            {
+                return;
+            }
 
             Debug.Log("Left Mouse Clicked");
             if(shapeType == Shape3DType.Cube)

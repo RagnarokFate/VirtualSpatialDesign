@@ -5,8 +5,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-public enum status { Selection, Hightlight, None }
 public class UserSelection
 {
     private Material highlightMaterial;
@@ -45,10 +43,10 @@ public class UserSelection
             {
                 // Select the highlighted object
                 selectedObject = hit.collider.gameObject;
-                if (selectedObject.GetComponent<MeshRenderer>().material != selectionMaterial)
+                if (selectedObject.GetComponent<MeshRenderer>().material != selectionMaterial && selectedObject.CompareTag("Selectable"))
                 {
                     Debug.Log("Selected object : " + selectedObject.name);
-
+                    GameManager.Instance.SetActiveGameObject(selectedObject);
                     // Store the default material of the selected object
                     selectedObjectDefaultMaterial = selectedObject.GetComponent<MeshRenderer>().sharedMaterial;
                     selectedObject.GetComponent<MeshRenderer>().material = selectionMaterial;

@@ -55,9 +55,9 @@ public class GameManager : MonoBehaviour
     public ProBuilderMesh activeProBuilderObject;
 
     // Active tool (Assuming Tool is a class you've defined)
-    public MainTool currentMainTool;
-    public TransformTool currentTransformTool;
-    public BrushTool currentBrushTool; // push pull, extrude, etc.
+    public MainTool currentMainTool = MainTool.none;
+    public TransformTool currentTransformTool = TransformTool.none;
+    public BrushTool currentBrushTool = BrushTool.none; // push pull, extrude, etc.
 
     public int twoD_Counter;
     public int threeD_Counter;
@@ -116,7 +116,97 @@ public class GameManager : MonoBehaviour
         currentBrushTool = brushKit;
     }
 
-    
+    // =====================================================================================================================
+    public override string ToString()
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendLine("GameManager State:");
+
+        sb.AppendLine("Active GameObject:");
+        if (activeGameObject != null)
+        {
+            sb.AppendLine($"  Name: {activeGameObject.name}");
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        sb.AppendLine($"Active GameObject Index: {activeGameObjectIndex}");
+
+        sb.AppendLine("Active ProBuilder Object:");
+        if (activeProBuilderObject != null)
+        {
+            sb.AppendLine($"  Name: {activeProBuilderObject.name}");
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        sb.AppendLine("Current Main Tool:");
+        if (currentMainTool != null)
+        {
+            sb.AppendLine($"  Tool: {currentMainTool.ToString()}");
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        sb.AppendLine("Current Transform Tool:");
+        if (currentTransformTool != null)
+        {
+            sb.AppendLine($"  Tool: {currentTransformTool.ToString()}");
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        sb.AppendLine("Current Brush Tool:");
+        if (currentBrushTool != null)
+        {
+            sb.AppendLine($"  Tool: {currentBrushTool.ToString()}");
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        sb.AppendLine($"2D Counter: {twoD_Counter}");
+        sb.AppendLine($"3D Counter: {threeD_Counter}");
+
+        sb.AppendLine("Draw Line Color:");
+        sb.AppendLine($"  Color: {drawLineColor}");
+
+        sb.AppendLine("Draw Line Material:");
+        if (drawLineMaterial != null)
+        {
+            sb.AppendLine($"  Material: {drawLineMaterial.name}");
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        sb.AppendLine("Game Objects:");
+        if (gameObjectList.Count > 0)
+        {
+            foreach (var obj in gameObjectList)
+            {
+                sb.AppendLine($"  {obj.name}");
+            }
+        }
+        else
+        {
+            sb.AppendLine("  None");
+        }
+
+        return sb.ToString();
+    }
+
+
 
 
     // GetClosestObject creted to get the closest object to the mouse position
@@ -148,6 +238,16 @@ public class GameManager : MonoBehaviour
 
         return closestObject;
     }
-
+    public bool IsItAMesh(GameObject gameObject)
+    {
+        if (gameObject.transform.parent.name == "Meshs")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 

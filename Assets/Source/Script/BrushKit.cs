@@ -40,40 +40,37 @@ public class BrushKit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if (gameObject == null)
+        {
+            /*Debug.LogError("No Game Object Selected");*/
+            return;
+        }
+        else
+        {
+            if(GameManager.Instance.IsItAMesh(gameObject))
+            {
+                brushKitLayout.enabled = true;
+            }
+        }
 
         BrushTool currentBrushTool = getCurrentBrushTool();
-        if (currentBrushTool != lastBrushTool)
+        HandleBrushKitSwitch();
+
+        if (currentBrushTool == BrushTool.extrude)
         {
-            Debug.Log("Current Brush Tool: " + currentBrushTool);
-
-            // 1 time message for the user!
-            if (currentBrushTool == BrushTool.extrude)
-            {
-                //Extrude a selected object
-                /*GameObject ActiveGameObject = GameManager.Instance.activeGameObject;
-                Debug.Log("Selected Game Object is " + ActiveGameObject.name);*/
-
-                Debug.Log("Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)");
-            }
-            else if (currentBrushTool == BrushTool.cut)
-            {
-                //Cut a selected object
-            }
-            else
-            {
-
-                //Do nothing
-                //EXPORT
-
-            }
-            lastBrushTool = currentBrushTool;
-            GameManager.Instance.SetCurrentBrushTool(currentBrushTool);
+            HandleExtrudeMode();
         }
-       
-        
-        
+        else if (currentBrushTool == BrushTool.cut)
+        {
+            //HandleCutMode();
+        }
+        else
+        {
+            //HandleBevelMode();
+        }
 
-        
+
 
     }
 
@@ -104,31 +101,34 @@ public class BrushKit : MonoBehaviour
 
 
     // ======================================== 
-
-    //default add rigid body to the object
-    public void AddRigidBody(GameObject gameObject)
+    public void HandleBrushKitSwitch()
     {
-        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.mass = 1.0f;
-        rb.drag = 0.1f;
-        rb.angularDrag = 0.05f;
-        rb.useGravity = false;
-        rb.isKinematic = false;
+        BrushTool currentBrushTool = getCurrentBrushTool();
 
-        
+        if (currentBrushTool != lastBrushTool)
+        {
+            GameManager.Instance.currentMainTool = MainTool.none;
+            GameManager.Instance.currentTransformTool = TransformTool.none;
 
-        //print the center of mass of the object
-        Debug.Log("Center of Mass: " + rb.centerOfMass);
-        // NOTE : The center of mass is the point at which the object is ZERO!.
+            Debug.Log("Current Brush Tool: " + currentBrushTool);
+
+            // 1 time message for the user!
+            if (currentBrushTool == BrushTool.extrude)
+            {
+                Debug.Log("Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)");
+            }
+            else if (currentBrushTool == BrushTool.cut)
+            {
+                //Cut a selected object
+                Debug.Log("Cut Tool, Choose Vertix(V)/Edge(E)/Face(F)");
+            }
+            else
+            {
+            }
+            lastBrushTool = currentBrushTool;
+            GameManager.Instance.SetCurrentBrushTool(currentBrushTool);
+        }
     }
-
-    //default add collider to the object
-    public void AddCollider(GameObject gameObject)
-    {
-        MeshCollider meshCollider = gameObject.AddComponent<MeshCollider>();
-        // meshCollider.convex = true;
-    }
-
 
     // handle the object extrude mode
     public SelectingMode HandleExtrudeMode()
@@ -241,6 +241,7 @@ public class BrushKit : MonoBehaviour
     }*/
 
 
+    
 
 
 

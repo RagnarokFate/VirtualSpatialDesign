@@ -14,6 +14,8 @@ public class UserDeselection
     {
         // TODO
         GameManager.Instance.SetActiveGameObject(null);
+        GameManager.Instance.SetActiveProBuilderObject(null);
+
     }
 
 }

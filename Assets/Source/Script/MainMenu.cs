@@ -18,16 +18,19 @@ public class MainMenu : MonoBehaviour
     private DrawLine drawLine;
 
 
-    //function profiles
+    //function profiles - MAIN MENU
     public UserSelection userSelection;
     public UserDeselection userDeselection;
     public UserDrawment userDrawment;
     public UserInsertion userInsertion;
 
+    //function profiles - Transformation ToolBar
+    public UserGrasp userGrasp;
+
     [SerializeField]
-    private DrawObject drawObject = DrawObject.Polygon;
+    private DrawObject drawObject = DrawObject.none;
     [SerializeField]
-    private Shape3DType shapeType = Shape3DType.Cube;
+    private Shape3DType shapeType = Shape3DType.None;
     static List<Vector3> vertices = new List<Vector3>();
 
     public Material highlightMaterial;
@@ -38,19 +41,25 @@ public class MainMenu : MonoBehaviour
 	{
         GameObject drawLineObject = new GameObject("DrawLineObject");
         drawLine = drawLineObject.AddComponent<DrawLine>();
+        //function profiles - MAIN MENU
 
         userSelection = new UserSelection(highlightMaterial, selectionMaterial);
         userDeselection = new UserDeselection();
         userDrawment = new UserDrawment();
         userInsertion = new UserInsertion();
 
-}
+        
+
+    }
 
 	// Update is called once per frame
 	void Update()
 	{
         if (currentMainTool != lastMainTool)
         {
+            GameManager.Instance.currentTransformTool = TransformTool.none;
+            GameManager.Instance.currentBrushTool = BrushTool.none;
+
             Debug.Log("Current Main Tool : " + currentMainTool);
             if(currentMainTool == MainTool.select)
             {
@@ -76,6 +85,7 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("No Tool is enabled");
             }
             lastMainTool = currentMainTool;
+            GameManager.Instance.SetCurrentMainTool(currentMainTool);
         }
 
         HandleMainMenu();

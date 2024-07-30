@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using UnityEditor.ProBuilder;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder;
 using UnityEngine.UI;
 
@@ -23,32 +24,85 @@ public class ToolBelt : MonoBehaviour
     private Canvas toolbarLayout;
 
 
+    //function profiles - Transformation ToolBar
+    public UserGrasp userGrasp;
+    public UserRotation userRotation;
     // Start is called before the first frame update
     void Start()
     {
         toolbarLayout = GameObject.Find("ToolbarLayout").GetComponent<Canvas>();
         toolbarLayout.enabled = false;
         
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // one message only for each tool
+        if(GameManager.Instance.activeGameObject == null)
+        {
+            /*Debug.Log("No Game Object Selected");*/
+            return;
+        }
+        else
+        {
+            toolbarLayout.enabled = true;
+            HandleTransformationToolSwitch();
+            HandleTransformationToolBar();    
+        }
+
+    }
+
+    // ============================================================================
+    // Getter and Setter
+    //getter and setter for tool Type
+    public TransformTool getCurrentTransformationTool()
+    {
+        return currentTransformTool;
+    }
+    public void setCurrentTransformationTool(TransformTool tool)
+    {
+        currentTransformTool = tool;
+    }
+
+
+    // create a function that check if which button is clicked lastly
+    public void OnEnable()
+    {
+        graspButton = GameObject.Find("GraspButton").GetComponent<Button>();
+        rotateButton = GameObject.Find("RotateButton").GetComponent<Button>();
+        scaleButton = GameObject.Find("ScaleButton").GetComponent<Button>();
+        deleteButton = GameObject.Find("DeleteButton").GetComponent<Button>();
+
+        graspButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.grasp));
+        rotateButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.rotate));
+        scaleButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.scale));
+        deleteButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.delete));
+    }
+
+    public void HandleTransformationToolSwitch()
+    {
         if (currentTransformTool != lastTransformTool)
         {
+            GameManager.Instance.currentMainTool = MainTool.none;
+            GameManager.Instance.currentBrushTool = BrushTool.none;
+
             Debug.Log("Current Tool: " + currentTransformTool);
-            
+
             if (currentTransformTool == TransformTool.grasp)
             {
                 //Operating A Game Object Grasp
                 Debug.Log("Translation Tranformation");
-
+                userGrasp = new UserGrasp();
+                userGrasp.unlockPosition();
             }
             else if (currentTransformTool == TransformTool.rotate)
             {
                 //Operating A Game Object Rotation
                 Debug.Log("Rotate Tranformation");
+                userRotation = new UserRotation();
+                userRotation.unlockRotation();
 
             }
             else if (currentTransformTool == TransformTool.scale)
@@ -68,48 +122,27 @@ public class ToolBelt : MonoBehaviour
             lastTransformTool = currentTransformTool;
             GameManager.Instance.SetCurrentTransformTool(currentTransformTool);
         }
-        processToolSwitch();
-
     }
 
-    // ============================================================================
-    // Getter and Setter
-    //getter and setter for tool Type
-    public TransformTool getCurrentTool()
-    {
-        return currentTransformTool;
-    }
-    public void setCurrentTool(TransformTool tool)
-    {
-        currentTransformTool = tool;
-    }
-
-
-    // create a function that check if which button is clicked lastly
-    public void OnEnable()
-    {
-        graspButton = GameObject.Find("GraspButton").GetComponent<Button>();
-        rotateButton = GameObject.Find("RotateButton").GetComponent<Button>();
-        scaleButton = GameObject.Find("ScaleButton").GetComponent<Button>();
-        deleteButton = GameObject.Find("DeleteButton").GetComponent<Button>();
-
-        graspButton.onClick.AddListener(() => setCurrentTool(TransformTool.grasp));
-        rotateButton.onClick.AddListener(() => setCurrentTool(TransformTool.rotate));
-        scaleButton.onClick.AddListener(() => setCurrentTool(TransformTool.scale));
-        deleteButton.onClick.AddListener(() => setCurrentTool(TransformTool.delete));
-    }
-
-
-    public void processToolSwitch()
+    public void HandleTransformationToolBar()
     {
         
         if (currentTransformTool == TransformTool.grasp)
         {
             //Operating A Game Object Grasp
+            if(userGrasp.meshPositionLock == false)
+            {
+                userGrasp.HandleUserGrasp();
+            }
+
         }
         else if (currentTransformTool == TransformTool.rotate)
         {
             //Operating A Game Object Rotation
+            if (userRotation.meshRotationLock == false)
+            {
+                userRotation.HandleUserRotation();
+            }
         }
         else if (currentTransformTool == TransformTool.scale)
         {
