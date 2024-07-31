@@ -52,6 +52,10 @@ public class BrushKit : MonoBehaviour
             {
                 brushKitLayout.enabled = true;
             }
+            else
+            {
+                brushKitLayout.enabled = false;
+            }
         }
 
         BrushTool currentBrushTool = getCurrentBrushTool();

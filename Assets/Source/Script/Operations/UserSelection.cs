@@ -29,7 +29,7 @@ public class UserSelection
     public void HandleSelection()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit))
         {
             Debug.Log("Mouse Clicked at pos: " + hit.point.ToString());
 

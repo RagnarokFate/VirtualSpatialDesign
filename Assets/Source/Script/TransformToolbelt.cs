@@ -28,6 +28,7 @@ public class ToolBelt : MonoBehaviour
     public UserGrasp userGrasp;
     public UserRotation userRotation;
     public UserScale userScale;
+    public UserDeletion userDeletion;
     // Start is called before the first frame update
     void Start()
     {
@@ -159,6 +160,8 @@ public class ToolBelt : MonoBehaviour
         else if (currentTransformTool == TransformTool.delete)
         {
             //Deleting The Game Object
+            userDeletion = new UserDeletion();
+            userDeletion.HandleDeletion();
         }
 
     }        
