@@ -25,15 +25,16 @@ public class BrushKit : MonoBehaviour
 
     private Canvas brushKitLayout;
 
-
-    // ProBuilderMesh pbMesh;
-
+    // profile users interaction
+    public UserExtrusion userExtrusion;
 
     // Start is called before the first frame update
     void Start()
     {
         brushKitLayout = GameObject.Find("BrushKitLayout").GetComponent<Canvas>();
         brushKitLayout.enabled = false;
+
+        userExtrusion = new UserExtrusion();
 
     }
 
@@ -63,7 +64,7 @@ public class BrushKit : MonoBehaviour
 
         if (currentBrushTool == BrushTool.extrude)
         {
-            HandleExtrudeMode();
+            userExtrusion.HandleExtrusion();
         }
         else if (currentBrushTool == BrushTool.cut)
         {
@@ -89,9 +90,7 @@ public class BrushKit : MonoBehaviour
 
     }
 
-    //
-    
-
+    // ===================================================================================================================
     // getter and setter for currentBrushTool
     public BrushTool getCurrentBrushTool()
     {
@@ -120,6 +119,7 @@ public class BrushKit : MonoBehaviour
             if (currentBrushTool == BrushTool.extrude)
             {
                 Debug.Log("Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)");
+                userExtrusion.UnlockExtrusion();
             }
             else if (currentBrushTool == BrushTool.cut)
             {
@@ -135,7 +135,7 @@ public class BrushKit : MonoBehaviour
     }
 
     // handle the object extrude mode
-    public SelectingMode HandleExtrudeMode()
+/*    public SelectingMode HandleExtrudeMode()
     {
         // select the object
         SelectingMode currentSelectingMode = SelectingMode.none;
@@ -164,11 +164,11 @@ public class BrushKit : MonoBehaviour
         }
 
         return currentSelectingMode;
-    }
+    }*/
 
 
 
-    public void ExtrudeFaces()
+    /*public void ExtrudeFaces()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
         if (gameObject == null)
@@ -224,7 +224,7 @@ public class BrushKit : MonoBehaviour
         {
             Debug.LogError($"Extrusion failed: {e.Message}");
         }
-    }
+    }*/
 
 
     /*public void ExtrudeFaces()

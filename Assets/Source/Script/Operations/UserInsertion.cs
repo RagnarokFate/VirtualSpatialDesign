@@ -103,8 +103,15 @@ public class UserInsertion
             gameObject.tag = "Selectable";
             gameObject.name += " " + GameManager.Instance.gameObjectList.Count.ToString();
 
-            gameObject.AddComponent<MeshCollider>();
+            MeshCollider gameObjectCollider = gameObject.AddComponent<MeshCollider>();
+            gameObjectCollider.convex = true;
 
+            /*gameObjectCollider.material = Resources.Load<PhysicMaterial>("Physics Material/Sticky");
+            if (gameObjectCollider.material == null) 
+            {
+                Debug.LogError("Physics Material/Bouncy not found in the Resources folder. Please create one and name it 'Bouncy'.");
+            }*/
+            gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveProBuilderObject(pbMesh);

@@ -13,8 +13,16 @@ public class UserDeselection
     public void HandleDeselection()
     {
         // TODO
-        GameManager.Instance.SetActiveGameObject(null);
-        GameManager.Instance.SetActiveProBuilderObject(null);
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if(gameObject != null)
+        {
+            GameManager.Instance.SetActiveGameObject(null);
+            GameManager.Instance.SetActiveProBuilderObject(null);
+        }
+        else
+        {
+            return;
+        }
 
     }
 

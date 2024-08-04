@@ -120,7 +120,7 @@ public class ToolBelt : MonoBehaviour
             {
                 //Operating A Game Object Scaling
                 Debug.Log("Delete Game Object");
-
+                userDeletion = new UserDeletion();
             }
 
             // find the nearby object clicked from the mouse position aka input
@@ -160,7 +160,6 @@ public class ToolBelt : MonoBehaviour
         else if (currentTransformTool == TransformTool.delete)
         {
             //Deleting The Game Object
-            userDeletion = new UserDeletion();
             userDeletion.HandleDeletion();
         }
 

@@ -35,7 +35,7 @@ public class UserDrawment
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                Vector3 offset = new Vector3(0, 0.01f, 0);
+                Vector3 offset = new Vector3(0, 0.00001f, 0);
                 Vector3 point_pos = hit.point + offset;
                 // print the point position and it's index in vertices array
                 Debug.Log("Point Index: " + vertices.Count + "Point Position: " + point_pos);
@@ -77,7 +77,9 @@ public class UserDrawment
             gameObject = pbMesh.gameObject;
             gameObject.name += " " + GameManager.Instance.gameObjectList.Count.ToString();
             gameObject.tag = "Selectable";
-            gameObject.AddComponent<MeshCollider>();
+            gameObject.AddComponent<MeshCollider>().convex = true;
+
+            gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveProBuilderObject(pbMesh);
