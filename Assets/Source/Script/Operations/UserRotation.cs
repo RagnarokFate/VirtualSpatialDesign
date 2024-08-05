@@ -49,6 +49,7 @@ public class UserRotation
                     float rotationAngle = mouseDelta.magnitude * rotationSensitivity; // Adjust rotation sensitivity
 
                     Vector3 rotationAxis = Vector3.zero;
+                    HandleLock();
 
                     if (axisLock == AxisLock.none)
                     {
@@ -80,21 +81,37 @@ public class UserRotation
 
     public void HandleLock()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKey(KeyCode.X))
         {
-            locked = !locked;
-            axisLock = locked ? AxisLock.X_Axis : AxisLock.none;
+            locked = true;
+            if (locked)
+            {
+                axisLock = AxisLock.X_Axis;
+            }
+
         }
-        else if (Input.GetKeyDown(KeyCode.Y))
+        else if (Input.GetKey(KeyCode.Y))
         {
-            locked = !locked;
-            axisLock = locked ? AxisLock.Y_Axis : AxisLock.none;
+            locked = true;
+            if (locked)
+            {
+                axisLock = AxisLock.Y_Axis;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Z))
+        else if (Input.GetKey(KeyCode.Z))
         {
-            locked = !locked;
-            axisLock = locked ? AxisLock.Z_Axis : AxisLock.none;
+            locked = true;
+            if (locked)
+            {
+                axisLock = AxisLock.Z_Axis;
+            }
         }
+        else
+        {
+            locked = false;
+            axisLock = AxisLock.none;
+        }
+
     }
 
     public void LockRotation()

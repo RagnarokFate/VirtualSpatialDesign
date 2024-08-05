@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.ProBuilder;
@@ -15,6 +16,7 @@ public class UserExtrusion
     private Vector2 initialMousePos;
     private float initialExtrusion;
     private bool isExtruding;
+
 
 
     public bool meshExtrusionLock;
@@ -32,15 +34,16 @@ public class UserExtrusion
     public void HandleExtrusion()
     {
         if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 vectorSize = new Vector3(2, 2, 2);
-            ProBuilderMesh cubeGameObject = ShapeGenerator.GenerateCube(PivotLocation.Center, vectorSize);
-            cubeGameObject.name = "testCube";
-            ProBuilderMesh pbMesh = cubeGameObject;
+        {            
+            ProBuilderMesh pbMesh = GameManager.Instance.activeGameObject.GetComponent<ProBuilderMesh>();
 
-            float extrusionFactor = 10.0f;
+            List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0]};
+            // List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0], pbMesh.faces[1] };
 
-            pbMesh.faces = ExtrudeElements.Extrude(pbMesh, pbMesh.faces, ExtrudeMethod.FaceNormal, extrusionFactor);
+
+            float extrusionFactor = 5.0f;
+
+            pbMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, extrusionFactor);
             pbMesh.ToMesh();
             pbMesh.Refresh();
 

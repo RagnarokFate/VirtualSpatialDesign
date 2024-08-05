@@ -50,6 +50,8 @@ public class UserScale
                     float scaleFactor = 1 + mouseMagnitude * scaleSensitivity; // Adjust scaling sensitivity
 
                     Vector3 scale = initialScale;
+                    HandleLock();
+
                     if (axisLock == AxisLock.none)
                     {
                         scale = initialScale * scaleFactor;
@@ -80,21 +82,37 @@ public class UserScale
 
     public void HandleLock()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKey(KeyCode.X))
         {
-            locked = !locked;
-            axisLock = locked ? AxisLock.X_Axis : AxisLock.none;
+            locked = true;
+            if (locked)
+            {
+                axisLock = AxisLock.X_Axis;
+            }
+
         }
-        else if (Input.GetKeyDown(KeyCode.Y))
+        else if (Input.GetKey(KeyCode.Y))
         {
-            locked = !locked;
-            axisLock = locked ? AxisLock.Y_Axis : AxisLock.none;
+            locked = true;
+            if (locked)
+            {
+                axisLock = AxisLock.Y_Axis;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Z))
+        else if (Input.GetKey(KeyCode.Z))
         {
-            locked = !locked;
-            axisLock = locked ? AxisLock.Z_Axis : AxisLock.none;
+            locked = true;
+            if (locked)
+            {
+                axisLock = AxisLock.Z_Axis;
+            }
         }
+        else
+        {
+            locked = false;
+            axisLock = AxisLock.none;
+        }
+
     }
 
     public void LockScale()

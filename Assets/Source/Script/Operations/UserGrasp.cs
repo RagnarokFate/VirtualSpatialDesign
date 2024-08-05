@@ -49,7 +49,7 @@ public class UserGrasp
                 GameManager.Instance.currentTransformTool = TransformTool.none;
                 return;
             }
-
+            HandleLock();
             if (locked)
             {
                 if (axisLock == AxisLock.X_Axis)
@@ -79,41 +79,35 @@ public class UserGrasp
     }
     public void HandleLock()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKey(KeyCode.X))
         {
-            locked = !locked;
+            locked = true;
             if (locked)
             {
                 axisLock = AxisLock.X_Axis;
             }
-            else
-            {
-                axisLock = AxisLock.none;
-            }
+            
         }
-        else if (Input.GetKeyDown(KeyCode.Y))
+        else if (Input.GetKey(KeyCode.Y))
         {
-            locked = !locked;
+            locked = true;
             if (locked)
             {
                 axisLock = AxisLock.Y_Axis;
             }
-            else
-            {
-                axisLock = AxisLock.none;
-            }
         }
-        else if (Input.GetKeyDown(KeyCode.Z))
+        else if (Input.GetKey(KeyCode.Z))
         {
-            locked = !locked;
+            locked = true;
             if (locked)
             {
                 axisLock = AxisLock.Z_Axis;
             }
-            else
-            {
-                axisLock = AxisLock.none;
-            }
+        }
+        else
+        {
+            locked = false;
+            axisLock = AxisLock.none;
         }
 
     }
