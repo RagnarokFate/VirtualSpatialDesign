@@ -17,7 +17,6 @@ public class UserDeselection
         if(gameObject != null)
         {
             GameManager.Instance.SetActiveGameObject(null);
-            GameManager.Instance.SetActiveProBuilderObject(null);
         }
         else
         {

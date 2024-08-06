@@ -49,10 +49,6 @@ public class GameManager : MonoBehaviour
 
     // Active game object
     public GameObject activeGameObject;
-    public int activeGameObjectIndex;
-
-    // Active ProBuilder Object
-    public ProBuilderMesh activeProBuilderObject;
 
     // Active tool (Assuming Tool is a class you've defined)
     public MainTool currentMainTool = MainTool.none;
@@ -91,15 +87,6 @@ public class GameManager : MonoBehaviour
     {
         activeGameObject = gameObject;
     }
-    public void setActiveGameObjectIndex(int index)
-    {
-        activeGameObjectIndex = index;
-    }
-
-    public void SetActiveProBuilderObject(ProBuilderMesh proBuilderObject)
-    {
-        activeProBuilderObject = proBuilderObject;
-    }
 
     public void SetCurrentMainTool(MainTool tool)
     {
@@ -132,17 +119,6 @@ public class GameManager : MonoBehaviour
             sb.AppendLine("  None");
         }
 
-        sb.AppendLine($"Active GameObject Index: {activeGameObjectIndex}");
-
-        sb.AppendLine("Active ProBuilder Object:");
-        if (activeProBuilderObject != null)
-        {
-            sb.AppendLine($"  Name: {activeProBuilderObject.name}");
-        }
-        else
-        {
-            sb.AppendLine("  None");
-        }
 
         sb.AppendLine("Current Main Tool:");
         if (currentMainTool != null)
@@ -207,37 +183,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-
-    // GetClosestObject creted to get the closest object to the mouse position
-    public GameObject GetClosestObject(Vector3 mousePosition)
-    {
-        GameObject closestObject = null;
-        float minDistance = float.MaxValue;
-
-        foreach (GameObject obj in gameObjectList)
-        {
-            Vector3 objPosition = Camera.main.WorldToScreenPoint(obj.transform.position);
-            float distance = Vector3.Distance(objPosition, mousePosition);
-
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                closestObject = obj;
-            }
-        }
-
-        if (closestObject != null)
-        {
-            Debug.Log("Closest Object: " + closestObject.name);
-        }
-        else
-        {
-            Debug.Log("No Object Found");
-        }
-
-        return closestObject;
-    }
     public bool IsItAMesh(GameObject gameObject)
     {
         if (gameObject.transform.parent.name == "Meshs")
@@ -249,5 +194,14 @@ public class GameManager : MonoBehaviour
             return false;
         }
     }
+
+    public void SetEditorGameObject(GameObject gameObject)
+    {
+        activeGameObject = gameObject;
+        DontDestroyOnLoad(gameObject);
+
+
+    }
+
 }
 

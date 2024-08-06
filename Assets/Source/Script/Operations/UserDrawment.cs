@@ -82,7 +82,6 @@ public class UserDrawment
             gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
-            GameManager.Instance.SetActiveProBuilderObject(pbMesh);
             GameManager.Instance.SetActiveGameObject(gameObject);
             GameManager.Instance.twoD_Counter++;
             drawLine.DestroyLine();

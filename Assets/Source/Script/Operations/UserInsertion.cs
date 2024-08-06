@@ -114,7 +114,6 @@ public class UserInsertion
             gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
-            GameManager.Instance.SetActiveProBuilderObject(pbMesh);
             GameManager.Instance.SetActiveGameObject(gameObject);
             GameManager.Instance.threeD_Counter++;
         }

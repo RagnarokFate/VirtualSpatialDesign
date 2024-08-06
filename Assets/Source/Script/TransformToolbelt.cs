@@ -41,8 +41,16 @@ public class ToolBelt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.currentMainTool != MainTool.none)
+        {
+            GameManager.Instance.currentMainTool = MainTool.none;
+            currentTransformTool = TransformTool.none;
+            lastTransformTool = TransformTool.none;
+
+        }
+
         // one message only for each tool
-        if(GameManager.Instance.activeGameObject == null)
+        if (GameManager.Instance.activeGameObject == null)
         {
             /*Debug.Log("No Game Object Selected");*/
             return;

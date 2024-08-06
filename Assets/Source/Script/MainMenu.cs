@@ -55,6 +55,14 @@ public class MainMenu : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+        if (GameManager.Instance.currentTransformTool != TransformTool.none)
+        {
+            GameManager.Instance.currentMainTool = MainTool.none;
+            currentMainTool = MainTool.none;
+            lastMainTool = MainTool.none;
+
+        }
+        
         if (currentMainTool != lastMainTool)
         {
             GameManager.Instance.currentTransformTool = TransformTool.none;
