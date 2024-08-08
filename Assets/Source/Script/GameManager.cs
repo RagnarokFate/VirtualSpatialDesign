@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Prevent the Singleton from being destroyed when scenes are loaded
-    /*private void Awake()
+    private void Awake()
     {
         if (_instance == null)
         {
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }*/
+    }
 
 
     private void Start()
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Prevent the Singleton from being destroyed when scenes are loaded
-    private void Awake()
+  /*  private void Awake()
     {
         if (_instance == null)
         {
@@ -71,7 +71,9 @@ public class GameManager : MonoBehaviour
             Debug.Log($"{this} was Destroyed because a manager already exists");
             Destroy(gameObject);
         }
-    }
+    }*/
+
+
 
     // List of game objects
     public List<GameObject> gameObjectList = new List<GameObject>();
@@ -93,7 +95,8 @@ public class GameManager : MonoBehaviour
     public Material drawLineMaterial;
 
 
-    
+    //Editor Parameters
+    public SelectModeToEdit selectModeToEdit = SelectModeToEdit.Vertex;
 
     public void AddGameObject(GameObject obj)
     {

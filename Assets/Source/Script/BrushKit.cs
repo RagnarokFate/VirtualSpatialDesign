@@ -34,6 +34,7 @@ public class BrushKit : MonoBehaviour
         brushKitLayout = GameObject.Find("BrushKitLayout").GetComponent<Canvas>();
         brushKitLayout.enabled = false;
 
+        // profile users interaction
         userExtrusion = new UserExtrusion();
 
     }

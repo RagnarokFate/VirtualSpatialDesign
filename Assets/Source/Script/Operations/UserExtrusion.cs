@@ -12,7 +12,6 @@ using UnityEngine.ProBuilder.Shapes;
 public class UserExtrusion
 {
     private bool locked;
-    private AxisLock axisLock;
     private Vector2 initialMousePos;
     private float initialExtrusion;
     private bool isExtruding;
@@ -26,7 +25,6 @@ public class UserExtrusion
     {
         meshExtrusionLock = false;
         locked = false;
-        axisLock = AxisLock.none;
         isExtruding = false;
     }
 
@@ -125,25 +123,6 @@ public class UserExtrusion
         }
 
     }*/
-
-    public void HandleLock()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            locked = !locked;
-            axisLock = locked ? AxisLock.X_Axis : AxisLock.none;
-        }
-        else if (Input.GetKeyDown(KeyCode.Y))
-        {
-            locked = !locked;
-            axisLock = locked ? AxisLock.Y_Axis : AxisLock.none;
-        }
-        else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            locked = !locked;
-            axisLock = locked ? AxisLock.Z_Axis : AxisLock.none;
-        }
-    }
 
     public void LockExtrusion()
     {
