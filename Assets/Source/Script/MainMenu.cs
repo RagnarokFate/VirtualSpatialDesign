@@ -79,7 +79,7 @@ public class MainMenu : MonoBehaviour
             }
             else if(currentMainTool == MainTool.insert)
             {
-                Debug.Log("2D Insert Tool is enabled");
+                Debug.Log("3D Insert Tool is enabled");
                 // insert 3d objects presents of probuilder to scene
 
             }

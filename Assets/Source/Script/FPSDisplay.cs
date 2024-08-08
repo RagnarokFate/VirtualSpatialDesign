@@ -6,7 +6,7 @@ using TMPro;
 public class FPSDisplay : MonoBehaviour
 {
 	// Text component to display the information
-	public Text displayText;
+	public string displayTextUI;
 
 	// Variables to calculate FPS
 	private int frameCount = 0;
@@ -14,11 +14,14 @@ public class FPSDisplay : MonoBehaviour
 	private float fps = 0.0f;
 	private float updateInterval = 1.0f;
 
-	void Start()
+    public Text displayText;
+
+
+    void Start()
 	{
 		try
 		{
-			displayText = GameObject.Find("Label").GetComponent<Text>();
+			Text displayText = GameObject.Find(displayTextUI).GetComponent<Text>();
 		}
         catch
         {

@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Prevent the Singleton from being destroyed when scenes are loaded
-    private void Awake()
+    /*private void Awake()
     {
         if (_instance == null)
         {
@@ -40,6 +40,35 @@ public class GameManager : MonoBehaviour
         }
         else if (_instance != this)
         {
+            Destroy(gameObject);
+        }
+    }*/
+
+
+    private void Start()
+    {
+        if (_instance == null)
+        {
+            _instance = FindObjectOfType<GameManager>();
+
+            GameObject singletonObject = new GameObject();
+            _instance = singletonObject.AddComponent<GameManager>();
+            singletonObject.name = typeof(GameManager).ToString() + " (Singleton)";
+        }
+    }
+
+    // Prevent the Singleton from being destroyed when scenes are loaded
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            Debug.Log($"{this} has become the manager and was set DDOL");
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Debug.Log($"{this} was Destroyed because a manager already exists");
             Destroy(gameObject);
         }
     }
@@ -64,7 +93,6 @@ public class GameManager : MonoBehaviour
     public Material drawLineMaterial;
 
 
-    // Methods to manipulate the game objects, tools, etc.
     
 
     public void AddGameObject(GameObject obj)
@@ -73,7 +101,7 @@ public class GameManager : MonoBehaviour
         {
             gameObjectList.Add(obj);
         }
-        Debug.Log("Game Object Added: " + obj.name + "number : " + gameObjectList.Count);
+        Debug.Log("Game Object Added: " + obj.name + "| number : " + gameObjectList.Count);
     }
 
     public List<GameObject> GetGameObjects()

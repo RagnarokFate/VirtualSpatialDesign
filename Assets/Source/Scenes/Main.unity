@@ -6662,6 +6662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36b25bd862627b4e82e37221a644a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayTextUI: Label
   displayText: {fileID: 1486669307}
 --- !u!4 &1491002868 stripped
 Transform:
@@ -7339,15 +7340,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_BackGroundColor.b
-      value: 0.4433962
+      value: 0.20754719
       objectReference: {fileID: 0}
     - target: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_BackGroundColor.g
-      value: 0.4433962
+      value: 0.20754719
       objectReference: {fileID: 0}
     - target: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_BackGroundColor.r
-      value: 0.4433962
+      value: 0.20754719
       objectReference: {fileID: 0}
     - target: {fileID: 19064736505062540, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_TranslateSpeed
@@ -8259,7 +8260,7 @@ Transform:
   m_GameObject: {fileID: 1618367251}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.20766366, y: 1.6726816, z: -0.34299663}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10061,7 +10062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1226910596512393800, guid: 01a652e6f7382d844aa1721d826a6b22, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.08
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 1226910596512393800, guid: 01a652e6f7382d844aa1721d826a6b22, type: 3}
       propertyPath: m_LocalRotation.w
