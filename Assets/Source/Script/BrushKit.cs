@@ -111,8 +111,6 @@ public class BrushKit : MonoBehaviour
 
         if (currentBrushTool != lastBrushTool)
         {
-            GameManager.Instance.currentMainTool = MainTool.none;
-            GameManager.Instance.currentTransformTool = TransformTool.none;
 
             Debug.Log("Current Brush Tool: " + currentBrushTool);
 

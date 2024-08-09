@@ -57,23 +57,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Prevent the Singleton from being destroyed when scenes are loaded
-  /*  private void Awake()
-    {
-        if (_instance == null)
-        {
-            Debug.Log($"{this} has become the manager and was set DDOL");
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (_instance != this)
-        {
-            Debug.Log($"{this} was Destroyed because a manager already exists");
-            Destroy(gameObject);
-        }
-    }*/
-
-
 
     // List of game objects
     public List<GameObject> gameObjectList = new List<GameObject>();
@@ -82,9 +65,8 @@ public class GameManager : MonoBehaviour
     public GameObject activeGameObject;
 
     // Active tool (Assuming Tool is a class you've defined)
-    public MainTool currentMainTool = MainTool.none;
-    public TransformTool currentTransformTool = TransformTool.none;
-    public BrushTool currentBrushTool = BrushTool.none; // push pull, extrude, etc.
+    public Tool currentTool = Tool.none;
+    public Tool lastTool = Tool.none;
 
     public int twoD_Counter;
     public int threeD_Counter;
@@ -96,7 +78,11 @@ public class GameManager : MonoBehaviour
 
 
     //Editor Parameters
-    public SelectModeToEdit selectModeToEdit = SelectModeToEdit.Vertex;
+    public BrushTool currentBrushTool = BrushTool.none; // push pull, extrude, etc.
+    public SelectModeToEdit selectModeToEdit = SelectModeToEdit.Face;
+    public List<Vector3> editorVertices;
+    public List<Vector2> editorEdges;
+    public List<Face> editorfaces;
 
     public void AddGameObject(GameObject obj)
     {
@@ -119,15 +105,7 @@ public class GameManager : MonoBehaviour
         activeGameObject = gameObject;
     }
 
-    public void SetCurrentMainTool(MainTool tool)
-    {
-        currentMainTool = tool;
-    }
-
-    public void SetCurrentTransformTool(TransformTool tool)
-    {
-        currentTransformTool = tool;
-    }
+    
 
     public void SetCurrentBrushTool(BrushTool brushKit)
     {
@@ -151,25 +129,16 @@ public class GameManager : MonoBehaviour
         }
 
 
-        sb.AppendLine("Current Main Tool:");
-        if (currentMainTool != null)
+        sb.AppendLine("Current Tool:");
+        if (currentTool != null)
         {
-            sb.AppendLine($"  Tool: {currentMainTool.ToString()}");
+            sb.AppendLine($"  Tool: {currentTool.ToString()}");
         }
         else
         {
             sb.AppendLine("  None");
         }
 
-        sb.AppendLine("Current Transform Tool:");
-        if (currentTransformTool != null)
-        {
-            sb.AppendLine($"  Tool: {currentTransformTool.ToString()}");
-        }
-        else
-        {
-            sb.AppendLine("  None");
-        }
 
         sb.AppendLine("Current Brush Tool:");
         if (currentBrushTool != null)

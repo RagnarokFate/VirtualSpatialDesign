@@ -11,9 +11,6 @@ using UnityEngine.UI;
 
 public class ToolBelt : MonoBehaviour
 {
-    //[SerializeField]
-    private TransformTool currentTransformTool = TransformTool.none;
-    private TransformTool lastTransformTool = TransformTool.none;
     // Transofrm Tool Buttons
     private Button graspButton;
     private Button rotateButton;
@@ -41,13 +38,13 @@ public class ToolBelt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.currentMainTool != MainTool.none)
+        /*if (GameManager.Instance.currentMainTool != MainTool.none)
         {
             GameManager.Instance.currentMainTool = MainTool.none;
             currentTransformTool = TransformTool.none;
             lastTransformTool = TransformTool.none;
 
-        }
+        }*/
 
         // one message only for each tool
         if (GameManager.Instance.activeGameObject == null)
@@ -67,15 +64,23 @@ public class ToolBelt : MonoBehaviour
     // ============================================================================
     // Getter and Setter
     //getter and setter for tool Type
-    public TransformTool getCurrentTransformationTool()
+    public void setCurrentTool(Tool tool)
     {
-        return currentTransformTool;
+        GameManager.Instance.currentTool = tool;
     }
-    public void setCurrentTransformationTool(TransformTool tool)
+    public Tool getCurrentTool()
     {
-        currentTransformTool = tool;
+        return GameManager.Instance.currentTool;
     }
 
+    public void setLastTool(Tool tool)
+    {
+        GameManager.Instance.lastTool = tool;
+    }
+    public Tool getLastTool()
+    {
+        return GameManager.Instance.lastTool;
+    }
 
     // create a function that check if which button is clicked lastly
     public void OnEnable()
@@ -85,29 +90,29 @@ public class ToolBelt : MonoBehaviour
         scaleButton = GameObject.Find("ScaleButton").GetComponent<Button>();
         deleteButton = GameObject.Find("DeleteButton").GetComponent<Button>();
 
-        graspButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.grasp));
-        rotateButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.rotate));
-        scaleButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.scale));
-        deleteButton.onClick.AddListener(() => setCurrentTransformationTool(TransformTool.delete));
+        graspButton.onClick.AddListener(() => setCurrentTool(Tool.grasp));
+        rotateButton.onClick.AddListener(() => setCurrentTool(Tool.rotate));
+        scaleButton.onClick.AddListener(() => setCurrentTool(Tool.scale));
+        deleteButton.onClick.AddListener(() => setCurrentTool(Tool.delete));
     }
 
     public void HandleTransformationToolSwitch()
     {
-        if (currentTransformTool != lastTransformTool)
+        Tool currentTool = getCurrentTool();
+        Tool lastTool = getLastTool();
+
+        if (currentTool != lastTool)
         {
-            GameManager.Instance.currentMainTool = MainTool.none;
-            GameManager.Instance.currentBrushTool = BrushTool.none;
+            Debug.Log("Current Tool: " + currentTool);
 
-            Debug.Log("Current Tool: " + currentTransformTool);
-
-            if (currentTransformTool == TransformTool.grasp)
+            if (currentTool == Tool.grasp)
             {
                 //Operating A Game Object Grasp
                 Debug.Log("Translation Tranformation");
                 userGrasp = new UserGrasp();
                 userGrasp.unlockPosition();
             }
-            else if (currentTransformTool == TransformTool.rotate)
+            else if (currentTool == Tool.rotate)
             {
                 //Operating A Game Object Rotation
                 Debug.Log("Rotate Tranformation");
@@ -115,7 +120,7 @@ public class ToolBelt : MonoBehaviour
                 userRotation.UnlockRotation();
 
             }
-            else if (currentTransformTool == TransformTool.scale)
+            else if (currentTool == Tool.scale)
             {
                 //Operating A Game Object Scaling
                 Debug.Log("Scale Tranformation");
@@ -124,7 +129,7 @@ public class ToolBelt : MonoBehaviour
 
 
             }
-            else if (currentTransformTool == TransformTool.delete)
+            else if (currentTool == Tool.delete)
             {
                 //Operating A Game Object Scaling
                 Debug.Log("Delete Game Object");
@@ -132,15 +137,14 @@ public class ToolBelt : MonoBehaviour
             }
 
             // find the nearby object clicked from the mouse position aka input
-            lastTransformTool = currentTransformTool;
-            GameManager.Instance.SetCurrentTransformTool(currentTransformTool);
+            setLastTool(currentTool);
         }
     }
 
     public void HandleTransformationToolBar()
     {
-        
-        if (currentTransformTool == TransformTool.grasp)
+        Tool currentTool = getCurrentTool();
+        if (currentTool == Tool.grasp)
         {
             //Operating A Game Object Grasp
             if(userGrasp.meshPositionLock == false)
@@ -149,7 +153,7 @@ public class ToolBelt : MonoBehaviour
             }
 
         }
-        else if (currentTransformTool == TransformTool.rotate)
+        else if (currentTool == Tool.rotate)
         {
             //Operating A Game Object Rotation
             if (userRotation.meshRotationLock == false)
@@ -157,7 +161,7 @@ public class ToolBelt : MonoBehaviour
                 userRotation.HandleUserRotation();
             }
         }
-        else if (currentTransformTool == TransformTool.scale)
+        else if (currentTool == Tool.scale)
         {
             //Operating A Game Object Scaling
             if (userScale.meshScaleLock == false)
@@ -165,7 +169,7 @@ public class ToolBelt : MonoBehaviour
                 userScale.HandleUserScale();
             }
         }
-        else if (currentTransformTool == TransformTool.delete)
+        else if (currentTool == Tool.delete)
         {
             //Deleting The Game Object
             userDeletion.HandleDeletion();

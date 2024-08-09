@@ -22,8 +22,6 @@ public class UserGrasp
     public void HandleUserGrasp()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
-        GameManager.Instance.currentBrushTool = BrushTool.none;
-        GameManager.Instance.currentMainTool = MainTool.none;
         
 
         if (gameObject != null)
@@ -44,9 +42,7 @@ public class UserGrasp
             {
                 lockPosition();
                 gameObject.transform.position = worldPos;
-                GameManager.Instance.currentMainTool = MainTool.none;
-                GameManager.Instance.currentBrushTool = BrushTool.none;
-                GameManager.Instance.currentTransformTool = TransformTool.none;
+                
                 return;
             }
             HandleLock();

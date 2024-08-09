@@ -6,14 +6,12 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-	private MainTool currentMainTool = MainTool.none;
-    private MainTool lastMainTool = MainTool.none;
 
     private Button selectButton;
     private Button deselectButton;
     private Button insertButton;
     private Button drawButton;
-
+    private Button measureButton;
 
     private DrawLine drawLine;
 
@@ -23,9 +21,8 @@ public class MainMenu : MonoBehaviour
     public UserDeselection userDeselection;
     public UserDrawment userDrawment;
     public UserInsertion userInsertion;
+    public UserMeasure userMeasure;
 
-    //function profiles - Transformation ToolBar
-    public UserGrasp userGrasp;
 
     [SerializeField]
     private DrawObject drawObject = DrawObject.none;
@@ -47,55 +44,17 @@ public class MainMenu : MonoBehaviour
         userDeselection = new UserDeselection();
         userDrawment = new UserDrawment();
         userInsertion = new UserInsertion();
+        userMeasure = new UserMeasure(drawLine);
 
-        
+
 
     }
 
 	// Update is called once per frame
 	void Update()
 	{
-        if (GameManager.Instance.currentTransformTool != TransformTool.none)
-        {
-            GameManager.Instance.currentMainTool = MainTool.none;
-            currentMainTool = MainTool.none;
-            lastMainTool = MainTool.none;
 
-        }
-        
-        if (currentMainTool != lastMainTool)
-        {
-            GameManager.Instance.currentTransformTool = TransformTool.none;
-            GameManager.Instance.currentBrushTool = BrushTool.none;
-
-            Debug.Log("Current Main Tool : " + currentMainTool);
-            if(currentMainTool == MainTool.select)
-            {
-                Debug.Log("Select Tool is enabled");
-            }
-            else if(currentMainTool == MainTool.deselect)
-            {
-                Debug.Log("Deselect Tool is enabled");
-            }
-            else if(currentMainTool == MainTool.insert)
-            {
-                Debug.Log("3D Insert Tool is enabled");
-                // insert 3d objects presents of probuilder to scene
-
-            }
-            else if(currentMainTool == MainTool.draw)
-            {
-                Debug.Log("2D Draw Tool is enabled");
-                // draw 2d objects presents of probuilder to scene
-            }
-            else
-            {
-                Debug.Log("No Tool is enabled");
-            }
-            lastMainTool = currentMainTool;
-            GameManager.Instance.SetCurrentMainTool(currentMainTool);
-        }
-
+        HandleToolSwitch();
         HandleMainMenu();
 
     }
@@ -107,40 +66,110 @@ public class MainMenu : MonoBehaviour
         deselectButton = GameObject.Find("DeselectButton").GetComponent<Button>();
         insertButton = GameObject.Find("InsertButton").GetComponent<Button>();
         drawButton = GameObject.Find("DrawButton").GetComponent<Button>();
+        measureButton = GameObject.Find("MeasureButton").GetComponent<Button>();
 
-        selectButton.onClick.AddListener(() => setCurrentMainTool(MainTool.select));
-        deselectButton.onClick.AddListener(() => setCurrentMainTool(MainTool.deselect));
-        insertButton.onClick.AddListener(() => setCurrentMainTool(MainTool.insert));
-        drawButton.onClick.AddListener(() => setCurrentMainTool(MainTool.draw));
+        selectButton.onClick.AddListener(() => setCurrentTool(Tool.select));
+        deselectButton.onClick.AddListener(() => setCurrentTool(Tool.deselect));
+        insertButton.onClick.AddListener(() => setCurrentTool(Tool.insert));
+        drawButton.onClick.AddListener(() => setCurrentTool(Tool.draw));
+        measureButton.onClick.AddListener(() => setCurrentTool(Tool.measure));
+    }
 
+
+    // ========================================================================================
+    // Getters and Setters
+    public void setCurrentTool(Tool tool)
+    {
+        GameManager.Instance.currentTool = tool;
+    }
+    public Tool getCurrentTool()
+    {
+        return GameManager.Instance.currentTool;
+    }
+
+    public void setLastTool(Tool tool)
+    {
+        GameManager.Instance.lastTool = tool;
+    }
+    public Tool getLastTool()
+    {
+        return GameManager.Instance.lastTool;
+    }
+
+    public void HandleToolSwitch()
+    {
+        Tool currentTool = getCurrentTool();
+        Tool lastTool = getLastTool();
+
+        if (currentTool != lastTool)
+        {
+
+            Debug.Log("Current Main Tool : " + currentTool);
+            if (currentTool == Tool.select)
+            {
+                Debug.Log("Select Tool is enabled");
+            }
+            else if (currentTool == Tool.deselect)
+            {
+                Debug.Log("Deselect Tool is enabled");
+            }
+            else if (currentTool == Tool.insert)
+            {
+                Debug.Log("3D Insert Tool is enabled");
+                // insert 3d objects presents of probuilder to scene
+
+            }
+            else if (currentTool == Tool.draw)
+            {
+                Debug.Log("2D Draw Tool is enabled");
+                // draw 2d objects presents of probuilder to scene
+            }
+            else if (currentTool == Tool.measure)
+            {
+                Debug.Log("Measure Tool is enabled");
+            }
+            else
+            {
+                Debug.Log("No Tool is enabled");
+            }
+            setLastTool(currentTool);
+        }
     }
 
     public void HandleMainMenu()
     {
-        if (currentMainTool == MainTool.select)
+        Tool currentTool = getCurrentTool();
+        Tool lastTool = getLastTool();
+
+        if (currentTool == Tool.select)
         {
             // select tool is enabled
             userSelection.HandleHighlight();
             userSelection.HandleSelection();
 
         }
-        else if (currentMainTool == MainTool.deselect)
+        else if (currentTool == Tool.deselect)
         {
             // deselect tool is enabled
             userDeselection.HandleDeselection();
         }
-        else if (currentMainTool == MainTool.insert)
+        else if (currentTool == Tool.insert)
         {
             // insert tool is enabled
             userInsertion.SetShapeType(shapeType);
             userInsertion.HandleInsertion();
         }
-        else if (currentMainTool == MainTool.draw)
+        else if (currentTool == Tool.draw)
         {
             // draw tool is enabled
             userDrawment.SetDrawObject(drawObject);
             userDrawment.HandleDrawment();
 
+        }
+        else if (currentTool == Tool.measure)
+        {
+            // measure tool is enabled
+            userMeasure.HandleMeasure();
         }
         else
         {
@@ -152,10 +181,5 @@ public class MainMenu : MonoBehaviour
 
 
 
-    // ========================================================================================
-    // Getters and Setters
-    public void setCurrentMainTool(MainTool tool)
-    {
-        currentMainTool = tool;
-    }
+
 }

@@ -5,8 +5,9 @@ using TMPro;
 
 public class FPSDisplay : MonoBehaviour
 {
-	// Text component to display the information
-	public string displayTextUI;
+	bool visible = false;
+    // Text component to display the information
+    public string displayTextUI;
 
 	// Variables to calculate FPS
 	private int frameCount = 0;
@@ -22,7 +23,8 @@ public class FPSDisplay : MonoBehaviour
 		try
 		{
 			Text displayText = GameObject.Find(displayTextUI).GetComponent<Text>();
-		}
+			displayText.enabled = visible;
+        }
         catch
         {
             Debug.LogError("FPSDisplay: Can't find the Text component.");
@@ -54,5 +56,11 @@ public class FPSDisplay : MonoBehaviour
 		string fpsString = $"FPS: {fps:F2}\n";
 		string gameManagerState = GameManager.Instance.ToString();
 		displayText.text = fpsString + gameManagerState;
-	}
+    }
+
+    public void ToggleDisplay()
+    {
+        visible = !visible;
+        displayText.enabled = visible;
+    }
 }

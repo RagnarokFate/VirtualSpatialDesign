@@ -35,7 +35,8 @@ public class UserExtrusion
         {            
             ProBuilderMesh pbMesh = GameManager.Instance.activeGameObject.GetComponent<ProBuilderMesh>();
 
-            List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0]};
+            // List<Face> facesToExtrude = GameManager.Instance.editorfaces;
+            List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0] };
             // List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0], pbMesh.faces[1] };
 
 

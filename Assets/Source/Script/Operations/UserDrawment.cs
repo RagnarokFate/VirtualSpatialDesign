@@ -16,9 +16,8 @@ public class UserDrawment
 
     public UserDrawment()
     {
-        pbMesh = ProBuilderMesh.Create();
-        GameObject drawLineObject = new GameObject("DrawLineObject");
-        drawLine = drawLineObject.AddComponent<DrawLine>();
+        GameObject gameObject = new GameObject("DrawLineObject");
+        drawLine = gameObject.AddComponent<DrawLine>();
     }
 
     public void SetDrawObject(DrawObject drawObject)
@@ -47,6 +46,7 @@ public class UserDrawment
         if (Input.GetMouseButtonDown(1))
         {
             GameObject gameObject;
+            pbMesh = ProBuilderMesh.Create();
 
             if (drawObject == DrawObject.Point)
             {

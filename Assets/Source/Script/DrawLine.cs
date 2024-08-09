@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DrawLine : MonoBehaviour
 {
-    public Color lineColor = Color.black;
+    public Color lineColor = Color.red;
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> indices = new List<int>();
     private Mesh lineMesh;

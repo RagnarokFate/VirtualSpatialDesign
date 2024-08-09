@@ -15,8 +15,6 @@ public class UserDeletion
         GameObject gameObject = GameManager.Instance.activeGameObject;
         if (gameObject != null)
         {
-            GameManager.Instance.currentBrushTool = BrushTool.none;
-            GameManager.Instance.currentMainTool = MainTool.none;
 
             if (gameObject == null)
             {

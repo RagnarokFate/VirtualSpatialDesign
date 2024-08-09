@@ -27,8 +27,6 @@ public class UserRotation
     public void HandleUserRotation()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
-        GameManager.Instance.currentBrushTool = BrushTool.none;
-        GameManager.Instance.currentMainTool = MainTool.none;
 
         if (gameObject != null)
         {

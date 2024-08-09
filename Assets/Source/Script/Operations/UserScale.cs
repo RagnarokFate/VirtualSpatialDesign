@@ -26,8 +26,6 @@ public class UserScale
     public void HandleUserScale()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
-        GameManager.Instance.currentBrushTool = BrushTool.none;
-        GameManager.Instance.currentMainTool = MainTool.none;
 
         if (gameObject != null)
         {
