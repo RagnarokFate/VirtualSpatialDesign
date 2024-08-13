@@ -37,14 +37,14 @@ public class MainMenu : MonoBehaviour
     void Start()
 	{
         GameObject drawLineObject = new GameObject("DrawLineObject");
-        drawLine = drawLineObject.AddComponent<DrawLine>();
+        // drawLine = drawLineObject.AddComponent<DrawLine>();
         //function profiles - MAIN MENU
 
         userSelection = new UserSelection(highlightMaterial, selectionMaterial);
         userDeselection = new UserDeselection();
         userDrawment = new UserDrawment();
         userInsertion = new UserInsertion();
-        userMeasure = new UserMeasure(drawLine);
+        userMeasure = new UserMeasure();
 
 
 
@@ -107,26 +107,27 @@ public class MainMenu : MonoBehaviour
             Debug.Log("Current Main Tool : " + currentTool);
             if (currentTool == Tool.select)
             {
-                Debug.Log("Select Tool is enabled");
+                Debug.Log("<color=blue> Select Tool is enabled </color>");
             }
             else if (currentTool == Tool.deselect)
             {
-                Debug.Log("Deselect Tool is enabled");
+                Debug.Log("<color=blue> Deselect Tool is enabled </color>");
             }
             else if (currentTool == Tool.insert)
             {
-                Debug.Log("3D Insert Tool is enabled");
+                Debug.Log("<color=blue> Insert Tool is enabled </color>");
                 // insert 3d objects presents of probuilder to scene
 
             }
             else if (currentTool == Tool.draw)
             {
-                Debug.Log("2D Draw Tool is enabled");
+                Debug.Log("<color=blue> 2D Draw Tool is enabled </color>");
+
                 // draw 2d objects presents of probuilder to scene
             }
             else if (currentTool == Tool.measure)
             {
-                Debug.Log("Measure Tool is enabled");
+                Debug.Log("<color=blue> Measure Tool is enabled </color>");
             }
             else
             {

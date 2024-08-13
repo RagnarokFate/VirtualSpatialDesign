@@ -5,9 +5,8 @@ using TMPro;
 
 public class FPSDisplay : MonoBehaviour
 {
-	bool visible = false;
-    // Text component to display the information
-    public string displayTextUI;
+	[SerializeField]
+    private static bool visible = false;
 
 	// Variables to calculate FPS
 	private int frameCount = 0;
@@ -20,16 +19,6 @@ public class FPSDisplay : MonoBehaviour
 
     void Start()
 	{
-		try
-		{
-			Text displayText = GameObject.Find(displayTextUI).GetComponent<Text>();
-			displayText.enabled = visible;
-        }
-        catch
-        {
-            Debug.LogError("FPSDisplay: Can't find the Text component.");
-        }
-
         StartCoroutine(UpdateFPS());
 	}
 

@@ -2,80 +2,164 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct UserMeasureData
-{
-    public Vector3 startPoint;
-    public Vector3 endPoint;
-    public float distance;
-}
 
 public class UserMeasure
 {
-    private UserMeasureData userMeasureData;
-    private bool isMeasuring = false;
-    private DrawLine drawLine;
+    private List<Vector3> vertices;
 
-    // Initialize the UserMeasureData and get the DrawLine component
-    public UserMeasure(DrawLine drawLine)
+    public static GameObject LineObject;
+
+    // Properties for lines
+    public Color color;
+    public float width;
+    public Material material;
+    // Simplification tolerance
+    public float tolerance;
+
+    private bool isContinuous = false;
+    private bool isMeasuring = false;
+
+    // Lists to hold data
+    private List<Vector3> lineVertices = new List<Vector3>();
+    private List<GameObject> lineObjects = new List<GameObject>();
+    private List<float> lineDistances = new List<float>();
+
+    // Root GameObject
+    private GameObject lineObjectList;
+
+
+    public UserMeasure()
     {
-        userMeasureData = new UserMeasureData();
-        this.drawLine = drawLine;
+        this.vertices = new List<Vector3>();
+        this.color = Color.red;
+        this.width = 0.1f;
+        this.material = new Material(Shader.Find("Unlit/Color"));
+        this.tolerance = 0.1f;
+
+        lineObjectList = GameObject.Find("LineObjectList");
     }
 
-    // Handle user input for measuring the distance
+    //create destructor
+    ~UserMeasure()
+    {
+        vertices.Clear();
+        GameObject.Destroy(LineObject);
+    }
+
     public void HandleMeasure()
     {
-        if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            StartMeasure();
-        }
+            Vector3 offset = new Vector3(0, 0.1f, 0);
+            Vector3 worldPos = (hit.collider.gameObject.name == "Floor") ? hit.point + offset : hit.point;
 
-        if (Input.GetMouseButton(0) && isMeasuring) // Left mouse button held down
+            if (Input.GetMouseButtonDown(0))
+            {
+                isMeasuring = true;
+
+                vertices.Add(worldPos);
+
+                LineObject = new GameObject("LineObject " + lineObjects.Count);
+                LineRenderer lineRenderer = LineObject.AddComponent<LineRenderer>();
+
+                if (lineRenderer == null)
+                {
+                    Debug.LogError("Failed to add LineRenderer to LineObject.");
+                    return;
+                }
+
+                LineObject.transform.parent = lineObjectList.transform;
+                lineRenderer.material = material;
+                lineRenderer.startColor = color;
+                lineRenderer.endColor = color;
+                lineRenderer.startWidth = width;
+                lineRenderer.endWidth = width;
+
+                lineObjects.Add(LineObject);
+            }
+            else if (isMeasuring)
+            {
+                vertices.Add(worldPos);
+                LineRenderer lineRenderer = LineObject.GetComponent<LineRenderer>();
+                if (lineRenderer == null)
+                {
+                    Debug.LogError("LineRenderer component is missing from LineObject.");
+                    return;
+                }
+
+                lineRenderer.positionCount = vertices.Count;
+                lineRenderer.SetPositions(vertices.ToArray());
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                LineRenderer lineRenderer = LineObject.GetComponent<LineRenderer>();
+                if (lineRenderer == null)
+                {
+                    Debug.LogError("LineRenderer component is missing from LineObject.");
+                    return;
+                }
+
+                lineRenderer.Simplify(tolerance);
+                isMeasuring = false;
+
+                float distance = CalculateDistance();
+                lineDistances.Add(distance);
+
+                Debug.Log("Distance: " + distance);
+
+                vertices.Clear();
+                
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                //clear all lines
+                foreach (GameObject line in lineObjects)
+                {
+                    GameObject.Destroy(line);
+                }
+                lineObjects.Clear();
+                lineDistances.Clear();
+            }
+        }
+    }
+
+
+    public void UpdateDrawLine(Vector2 mouseInput)
+    {
+        LineRenderer lineRenderer = LineObject.GetComponent<LineRenderer>();
+        Ray ray = Camera.main.ScreenPointToRay(mouseInput);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
         {
-            UpdateMeasure();
+            vertices.Add(hit.point);
+            lineRenderer.positionCount = vertices.Count;
+            lineRenderer.SetPositions(vertices.ToArray());
         }
+    }
 
-        if (Input.GetMouseButtonUp(0) && isMeasuring) // Left mouse button released
+    public void ClearLine()
+    {
+        vertices.Clear();
+        LineObject.GetComponent<LineRenderer>().positionCount = 0;
+    }
+
+    public void setLoop()
+    {
+        LineObject.GetComponent<LineRenderer>().loop = true;
+    }
+
+    public float CalculateDistance()
+    {
+        float distance = 0;
+        for (int i = 0; i < vertices.Count - 1; i++)
         {
-            EndMeasure();
+            distance += Vector3.Distance(vertices[i], vertices[i + 1]);
         }
-    }
-
-    private void StartMeasure()
-    {
-        isMeasuring = true;
-        userMeasureData.startPoint = GetMouseWorldPosition();
-        drawLine.DestroyLine(); // Reset the line before starting a new measurement
-        drawLine.UpdateLine(userMeasureData.startPoint); // Start drawing the line from the first point
-    }
-
-    private void UpdateMeasure()
-    {
-        userMeasureData.endPoint = GetMouseWorldPosition();
-        drawLine.DestroyLine(); // Reset the line each time to create a dynamic effect
-        drawLine.UpdateLine(userMeasureData.startPoint); // Draw from start point to current position
-        drawLine.UpdateLine(userMeasureData.endPoint);   // Draw to current position
-    }
-
-    private void EndMeasure()
-    {
-        isMeasuring = false;
-        userMeasureData.endPoint = GetMouseWorldPosition();
-        userMeasureData.distance = Vector3.Distance(userMeasureData.startPoint, userMeasureData.endPoint);
-
-        // Draw the final line between the two points
-        drawLine.DestroyLine();
-        drawLine.UpdateLine(userMeasureData.startPoint);
-        drawLine.UpdateLine(userMeasureData.endPoint);
-
-        Debug.Log("Distance: " + userMeasureData.distance.ToString("F2") + " units");
-    }
-
-    // Convert mouse position to world position
-    private Vector3 GetMouseWorldPosition()
-    {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = Camera.main.nearClipPlane; // Set a proper Z distance from the camera
-        return Camera.main.ScreenToWorldPoint(mousePosition);
+        return distance;
     }
 }

@@ -16,8 +16,7 @@ public class UserDrawment
 
     public UserDrawment()
     {
-        GameObject gameObject = new GameObject("DrawLineObject");
-        drawLine = gameObject.AddComponent<DrawLine>();
+        GameObject gameObject = new GameObject("DrawObject");
     }
 
     public void SetDrawObject(DrawObject drawObject)
@@ -40,7 +39,6 @@ public class UserDrawment
                 Debug.Log("Point Index: " + vertices.Count + "Point Position: " + point_pos);
                 vertices.Add(point_pos);
 
-                drawLine.UpdateLine(point_pos);
             }
         }
         if (Input.GetMouseButtonDown(1))
@@ -84,7 +82,6 @@ public class UserDrawment
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveGameObject(gameObject);
             GameManager.Instance.twoD_Counter++;
-            drawLine.DestroyLine();
             vertices.Clear();
 
 
