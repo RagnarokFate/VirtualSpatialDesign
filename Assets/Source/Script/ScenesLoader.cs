@@ -21,7 +21,7 @@ public class ScenesLoader : MonoBehaviour
 
         DisplaySoloObject();
         StoreObjectTransform();
-
+        resetTools();
         SceneManager.LoadScene("Editor");
 
         //set the active object to the center of the scene
@@ -62,6 +62,7 @@ public class ScenesLoader : MonoBehaviour
 
         DisplayAllObjects();
         LoadObjectTransform();
+        resetTools();
 
         SceneManager.LoadScene("Main");
 
@@ -80,6 +81,14 @@ public class ScenesLoader : MonoBehaviour
     public void LoadObjectTransform()
     {
         GameManager.Instance.activeGameObject.transform.position = tempPosition;
+    }
+
+    protected void resetTools()
+    {
+        GameManager.Instance.currentBrushTool = EditorTool.none;
+        GameManager.Instance.currentTool = Tool.none;
+        GameManager.Instance.lastTool = Tool.none;
+
     }
 
 }

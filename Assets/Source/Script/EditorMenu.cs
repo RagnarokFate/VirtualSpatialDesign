@@ -11,11 +11,11 @@ using UnityEditor.ProBuilder;
 
 
 
-public class BrushKit : MonoBehaviour
+public class EditorMenu : MonoBehaviour
 {
     [SerializeField]
-    private BrushTool currentBrushTool = BrushTool.none;
-    private BrushTool lastBrushTool = BrushTool.none;
+    private EditorTool currentBrushTool = EditorTool.none;
+    private EditorTool lastBrushTool = EditorTool.none;
 
 
     private Button ExtrudeButton;
@@ -23,7 +23,7 @@ public class BrushKit : MonoBehaviour
     // ADD MORE LATER TODO : BEVEL ETC...
 
 
-    private Canvas brushKitLayout;
+    private Canvas editorMenu;
 
     // profile users interaction
     public UserExtrusion userExtrusion;
@@ -31,8 +31,8 @@ public class BrushKit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        brushKitLayout = GameObject.Find("BrushKitLayout").GetComponent<Canvas>();
-        brushKitLayout.enabled = false;
+        editorMenu = GameObject.Find("EditorMenu").GetComponent<Canvas>();
+        editorMenu.enabled = false;
 
         // profile users interaction
         userExtrusion = new UserExtrusion();
@@ -52,22 +52,22 @@ public class BrushKit : MonoBehaviour
         {
             if(GameManager.Instance.IsItAMesh(gameObject))
             {
-                brushKitLayout.enabled = true;
+                editorMenu.enabled = true;
             }
             else
             {
-                brushKitLayout.enabled = false;
+                editorMenu.enabled = false;
             }
         }
 
-        BrushTool currentBrushTool = getCurrentBrushTool();
+        EditorTool currentBrushTool = getCurrentBrushTool();
         HandleBrushKitSwitch();
 
-        if (currentBrushTool == BrushTool.extrude)
+        if (currentBrushTool == EditorTool.extrude)
         {
             userExtrusion.HandleExtrusion();
         }
-        else if (currentBrushTool == BrushTool.cut)
+        else if (currentBrushTool == EditorTool.cut)
         {
             //HandleCutMode();
         }
@@ -86,18 +86,18 @@ public class BrushKit : MonoBehaviour
         ExtrudeButton = GameObject.Find("ExtrudeButton").GetComponent<Button>();
         CutButton = GameObject.Find("CuttingButton").GetComponent<Button>();
 
-        ExtrudeButton.onClick.AddListener(() => setCurrentBrushTool(BrushTool.extrude));
-        CutButton.onClick.AddListener(() => setCurrentBrushTool(BrushTool.cut));
+        ExtrudeButton.onClick.AddListener(() => setCurrentBrushTool(EditorTool.extrude));
+        CutButton.onClick.AddListener(() => setCurrentBrushTool(EditorTool.cut));
 
     }
 
     // ===================================================================================================================
     // getter and setter for currentBrushTool
-    public BrushTool getCurrentBrushTool()
+    public EditorTool getCurrentBrushTool()
     {
         return currentBrushTool;
     }
-    public void setCurrentBrushTool(BrushTool brushTool)
+    public void setCurrentBrushTool(EditorTool brushTool)
     {
         currentBrushTool = brushTool;
     }
@@ -107,7 +107,7 @@ public class BrushKit : MonoBehaviour
     // ======================================== 
     public void HandleBrushKitSwitch()
     {
-        BrushTool currentBrushTool = getCurrentBrushTool();
+        EditorTool currentBrushTool = getCurrentBrushTool();
 
         if (currentBrushTool != lastBrushTool)
         {
@@ -115,12 +115,12 @@ public class BrushKit : MonoBehaviour
             Debug.Log("Current Brush Tool: " + currentBrushTool);
 
             // 1 time message for the user!
-            if (currentBrushTool == BrushTool.extrude)
+            if (currentBrushTool == EditorTool.extrude)
             {
                 Debug.Log("Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)");
                 userExtrusion.UnlockExtrusion();
             }
-            else if (currentBrushTool == BrushTool.cut)
+            else if (currentBrushTool == EditorTool.cut)
             {
                 //Cut a selected object
                 Debug.Log("Cut Tool, Choose Vertix(V)/Edge(E)/Face(F)");

@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO : ADD MORE BOOLEAN OPTIONS 
-public enum BrushTool { extrude, cut, none };
+public enum EditorTool { extrude, cut, none };
 

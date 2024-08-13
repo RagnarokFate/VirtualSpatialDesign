@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
 
     //Editor Parameters
-    public BrushTool currentBrushTool = BrushTool.none; // push pull, extrude, etc.
+    public EditorTool currentBrushTool = EditorTool.none; // push pull, extrude, etc.
     public SelectModeToEdit selectModeToEdit = SelectModeToEdit.Face;
     public List<Vector3> editorVertices;
     public List<Vector2> editorEdges;
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     
 
-    public void SetCurrentBrushTool(BrushTool brushKit)
+    public void SetCurrentBrushTool(EditorTool brushKit)
     {
         currentBrushTool = brushKit;
     }

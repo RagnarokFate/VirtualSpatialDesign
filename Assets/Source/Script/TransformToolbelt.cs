@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder;
 using UnityEngine.UI;
 
-public class ToolBelt : MonoBehaviour
+public class TransformToolbelt : MonoBehaviour
 {
     // Transofrm Tool Buttons
     private Button graspButton;
