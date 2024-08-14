@@ -25,13 +25,33 @@ public class MainMenu : MonoBehaviour
 
 
     [SerializeField]
-    private DrawObject drawObject = DrawObject.none;
+    public static DrawObject drawObject = DrawObject.none;
     [SerializeField]
-    private Shape3DType shapeType = Shape3DType.None;
+    public static Shape3DType shapeType = Shape3DType.None;
     static List<Vector3> vertices = new List<Vector3>();
 
     public Material highlightMaterial;
     public Material selectionMaterial;
+
+/*    //2d shape buttons
+    private Button pointButton;
+    private Button quadButton;
+    private Button rectangleButton;
+    private Button polygonButton;
+
+    // 3d shape buttons
+    private Button archButton;
+    private Button coneButton;
+    private Button cubeButton;
+    private Button cylinderButton;
+    private Button pipeButton;
+    private Button planeButton;
+    private Button sphereButton;
+    private Button spriteButton;
+    private Button stairButton;
+    private Button torusButton;*/
+
+    private PocketPanelView pocketPanelView;
 
     // Start is called before the first frame update
     void Start()
@@ -73,6 +93,44 @@ public class MainMenu : MonoBehaviour
         insertButton.onClick.AddListener(() => setCurrentTool(Tool.insert));
         drawButton.onClick.AddListener(() => setCurrentTool(Tool.draw));
         measureButton.onClick.AddListener(() => setCurrentTool(Tool.measure));
+
+
+/*        // 2d shape buttons
+        pointButton = GameObject.Find("PointButton").GetComponent<Button>();
+        quadButton = GameObject.Find("QuadButton").GetComponent<Button>();
+        rectangleButton = GameObject.Find("RectangleButton").GetComponent<Button>();
+        polygonButton = GameObject.Find("PolygonButton").GetComponent<Button>();
+
+        // 3d shape buttons
+        archButton = GameObject.Find("ArchButton").GetComponent<Button>();
+        coneButton = GameObject.Find("ConeButton").GetComponent<Button>();
+        cubeButton = GameObject.Find("CubeButton").GetComponent<Button>();
+        cylinderButton = GameObject.Find("CylinderButton").GetComponent<Button>();
+        pipeButton = GameObject.Find("PipeButton").GetComponent<Button>();
+        planeButton = GameObject.Find("PlaneButton").GetComponent<Button>();
+        sphereButton = GameObject.Find("SphereButton").GetComponent<Button>();
+        spriteButton = GameObject.Find("SpriteButton").GetComponent<Button>();
+        stairButton = GameObject.Find("StairButton").GetComponent<Button>();
+        torusButton = GameObject.Find("TorusButton").GetComponent<Button>();
+
+
+        pointButton.onClick.AddListener(() => setDrawObject(DrawObject.Point));
+        quadButton.onClick.AddListener(() => setDrawObject(DrawObject.Quad));
+        rectangleButton.onClick.AddListener(() => setDrawObject(DrawObject.Rectangle));
+        polygonButton.onClick.AddListener(() => setDrawObject(DrawObject.Polygon));
+
+        archButton.onClick.AddListener(() => setShapeType(Shape3DType.Arch));
+        coneButton.onClick.AddListener(() => setShapeType(Shape3DType.Cone));
+        cubeButton.onClick.AddListener(() => setShapeType(Shape3DType.Cube));
+        cylinderButton.onClick.AddListener(() => setShapeType(Shape3DType.Cylinder));
+        pipeButton.onClick.AddListener(() => setShapeType(Shape3DType.Pipe));
+        planeButton.onClick.AddListener(() => setShapeType(Shape3DType.Plane));
+        sphereButton.onClick.AddListener(() => setShapeType(Shape3DType.Sphere));
+        spriteButton.onClick.AddListener(() => setShapeType(Shape3DType.Sprite));
+        stairButton.onClick.AddListener(() => setShapeType(Shape3DType.Stair));
+        torusButton.onClick.AddListener(() => setShapeType(Shape3DType.Torus));*/
+
+
     }
 
 
@@ -95,6 +153,9 @@ public class MainMenu : MonoBehaviour
     {
         return GameManager.Instance.lastTool;
     }
+
+    // ========================================================================================
+    
 
     public void HandleToolSwitch()
     {

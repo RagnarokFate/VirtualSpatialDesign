@@ -111,7 +111,7 @@ public class UserInsertion
             {
                 Debug.LogError("Physics Material/Bouncy not found in the Resources folder. Please create one and name it 'Bouncy'.");
             }*/
-            // gameObject.AddComponent<Rigidbody>();
+            //gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveGameObject(gameObject);

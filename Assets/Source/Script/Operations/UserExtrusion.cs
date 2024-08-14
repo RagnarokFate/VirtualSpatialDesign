@@ -40,7 +40,7 @@ public class UserExtrusion
             // List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0], pbMesh.faces[1] };
 
 
-            float extrusionFactor = 5.0f;
+            float extrusionFactor = 1.0f;
 
             pbMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, extrusionFactor);
             pbMesh.ToMesh();

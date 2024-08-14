@@ -78,8 +78,8 @@ public class GameManager : MonoBehaviour
 
 
     //Editor Parameters
-    public EditorTool currentBrushTool = EditorTool.none; // push pull, extrude, etc.
-    public SelectModeToEdit selectModeToEdit = SelectModeToEdit.Face;
+    public EditorTool currentEditorTool = EditorTool.none; // push pull, extrude, etc.
+    public SelectModeToEdit selectModeToEdit = SelectModeToEdit.none;
     public List<Vector3> editorVertices;
     public List<Vector2> editorEdges;
     public List<Face> editorfaces;
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     public void SetCurrentBrushTool(EditorTool brushKit)
     {
-        currentBrushTool = brushKit;
+        currentEditorTool = brushKit;
     }
 
     // =====================================================================================================================
@@ -141,9 +141,9 @@ public class GameManager : MonoBehaviour
 
 
         sb.AppendLine("Current Brush Tool:");
-        if (currentBrushTool != null)
+        if (currentEditorTool != null)
         {
-            sb.AppendLine($"  Tool: {currentBrushTool.ToString()}");
+            sb.AppendLine($"  Tool: {currentEditorTool.ToString()}");
         }
         else
         {

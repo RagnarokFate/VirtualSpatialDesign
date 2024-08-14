@@ -85,7 +85,7 @@ public class ScenesLoader : MonoBehaviour
 
     protected void resetTools()
     {
-        GameManager.Instance.currentBrushTool = EditorTool.none;
+        GameManager.Instance.currentEditorTool = EditorTool.none;
         GameManager.Instance.currentTool = Tool.none;
         GameManager.Instance.lastTool = Tool.none;
 

@@ -117,13 +117,13 @@ public class EditorMenu : MonoBehaviour
             // 1 time message for the user!
             if (currentBrushTool == EditorTool.extrude)
             {
-                Debug.Log("Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)");
+                Debug.Log("<color=green>Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)</color>");
                 userExtrusion.UnlockExtrusion();
             }
             else if (currentBrushTool == EditorTool.cut)
             {
                 //Cut a selected object
-                Debug.Log("Cut Tool, Choose Vertix(V)/Edge(E)/Face(F)");
+                Debug.Log("<color=green>Cut Tool, Choose Vertix(V)/Edge(E)/Face(F)</color>");
             }
             else
             {
