@@ -68,29 +68,22 @@ public class GameManager : MonoBehaviour
     public Tool currentTool = Tool.none;
     public Tool lastTool = Tool.none;
 
-    public int twoD_Counter;
-    public int threeD_Counter;
-
-    //setting default values for drawline
-    public Color drawLineColor;
-    //public Material drawLineMaterial = new Material(Shader.Find("Sprites/Default"));
-    public Material drawLineMaterial;
-
 
     //Editor Parameters
-    public EditorTool currentEditorTool = EditorTool.none; // push pull, extrude, etc.
+    public EditorTool currentEditorTool = EditorTool.none;
+    public EditorTool lastEditorTool = EditorTool.none;
     public SelectModeToEdit selectModeToEdit = SelectModeToEdit.none;
-    public List<Vector3> editorVertices;
-    public List<Vector2> editorEdges;
-    public List<Face> editorfaces;
+
+    public int twoD_Counter;
+    public int threeD_Counter;
 
     public void AddGameObject(GameObject obj)
     {
         if (!gameObjectList.Contains(obj))
         {
             gameObjectList.Add(obj);
+            Debug.Log("Game Object Added: " + obj.name + "| number : " + gameObjectList.Count);
         }
-        Debug.Log("Game Object Added: " + obj.name + "| number : " + gameObjectList.Count);
     }
 
     public List<GameObject> GetGameObjects()
@@ -105,12 +98,6 @@ public class GameManager : MonoBehaviour
         activeGameObject = gameObject;
     }
 
-    
-
-    public void SetCurrentBrushTool(EditorTool brushKit)
-    {
-        currentEditorTool = brushKit;
-    }
 
     // =====================================================================================================================
     public override string ToString()
@@ -129,42 +116,12 @@ public class GameManager : MonoBehaviour
         }
 
 
-        sb.AppendLine("Current Tool:");
-        if (currentTool != null)
-        {
-            sb.AppendLine($"  Tool: {currentTool.ToString()}");
-        }
-        else
-        {
-            sb.AppendLine("  None");
-        }
-
-
-        sb.AppendLine("Current Brush Tool:");
-        if (currentEditorTool != null)
-        {
-            sb.AppendLine($"  Tool: {currentEditorTool.ToString()}");
-        }
-        else
-        {
-            sb.AppendLine("  None");
-        }
+        sb.AppendLine($"Current Menu Tool: {currentTool.ToString()}");
+        sb.AppendLine($"Current Editor Tool: {currentEditorTool.ToString()}");
 
         sb.AppendLine($"2D Counter: {twoD_Counter}");
         sb.AppendLine($"3D Counter: {threeD_Counter}");
 
-        sb.AppendLine("Draw Line Color:");
-        sb.AppendLine($"  Color: {drawLineColor}");
-
-        sb.AppendLine("Draw Line Material:");
-        if (drawLineMaterial != null)
-        {
-            sb.AppendLine($"  Material: {drawLineMaterial.name}");
-        }
-        else
-        {
-            sb.AppendLine("  None");
-        }
 
         sb.AppendLine("Game Objects:");
         if (gameObjectList.Count > 0)

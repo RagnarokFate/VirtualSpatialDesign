@@ -31,6 +31,14 @@ public class UserDeletion
             {
                 gameObjects.Remove(gameObject);
                 Object.Destroy(gameObject);
+                if(GameManager.Instance.IsItAMesh(gameObject))
+                {
+                    GameManager.Instance.threeD_Counter--;
+                }
+                else
+                {
+                    GameManager.Instance.twoD_Counter--;
+                }
                 GameManager.Instance.activeGameObject = null;
                 Debug.Log("Game Object Deleted ");
                 GameManager.Instance.gameObjectList = gameObjects;

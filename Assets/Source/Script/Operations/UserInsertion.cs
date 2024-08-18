@@ -93,6 +93,10 @@ public class UserInsertion
             {
                 pbMesh = ShapeGenerator.CreateShape(ShapeType.Sprite, PivotLocation.FirstCorner);
             }
+            else
+            {
+                return;
+            }
 
             pbMesh.transform.parent = MeshParent.transform;
             pbMesh.transform.position = meshPosition;

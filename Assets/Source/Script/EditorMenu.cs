@@ -13,19 +13,29 @@ using UnityEditor.ProBuilder;
 
 public class EditorMenu : MonoBehaviour
 {
-    [SerializeField]
-    private EditorTool currentBrushTool = EditorTool.none;
-    private EditorTool lastBrushTool = EditorTool.none;
 
 
+    public static bool isSelected = false;
+    
+    // UI Elements
+    private Button SelectElementButton;
+    private Button InsertElementButton;
+    private Button EditElementButton;
+    private Button DeleteElementButton;
     private Button ExtrudeButton;
-    private Button CutButton;
-    // ADD MORE LATER TODO : BEVEL ETC...
-
 
     private Canvas editorMenu;
 
-    // profile users interaction
+    //Prefabs
+    public GameObject Vertex;
+    public GameObject Edge;
+    public GameObject Face;
+
+    /*// profile users interaction
+    public UserInsertEditor userInsertEditor;
+    public UserEditEditor userEditEditor;
+    public UserDeleteEditor userDeleteEditor;*/
+
     public UserExtrusion userExtrusion;
 
     // Start is called before the first frame update
@@ -42,39 +52,15 @@ public class EditorMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject gameObject = GameManager.Instance.activeGameObject;
-        if (gameObject == null)
-        {
-            /*Debug.LogError("No Game Object Selected");*/
-            return;
-        }
-        else
-        {
-            if(GameManager.Instance.IsItAMesh(gameObject))
-            {
-                editorMenu.enabled = true;
-            }
-            else
-            {
-                editorMenu.enabled = false;
-            }
-        }
+        CheckActiveMesh();
+        HandleEditorToolSwitch();
+        HandleEditorTools();
 
-        EditorTool currentBrushTool = getCurrentBrushTool();
-        HandleBrushKitSwitch();
-
-        if (currentBrushTool == EditorTool.extrude)
+        /*if (currentBrushTool == EditorTool.extrude)
         {
             userExtrusion.HandleExtrusion();
-        }
-        else if (currentBrushTool == EditorTool.cut)
-        {
-            //HandleCutMode();
-        }
-        else
-        {
-            //HandleBevelMode();
-        }
+        }*/
+
 
 
 
@@ -83,168 +69,129 @@ public class EditorMenu : MonoBehaviour
     // create a function that check if which button is clicked lastly
     public void OnEnable()
     {
+        SelectElementButton = GameObject.Find("SelectElementButton").GetComponent<Button>();
+        InsertElementButton = GameObject.Find("InsertElementButton").GetComponent<Button>();
+        EditElementButton = GameObject.Find("EditElementButton").GetComponent<Button>();
+        DeleteElementButton = GameObject.Find("DeleteElementButton").GetComponent<Button>();
         ExtrudeButton = GameObject.Find("ExtrudeButton").GetComponent<Button>();
-        CutButton = GameObject.Find("CuttingButton").GetComponent<Button>();
 
-        ExtrudeButton.onClick.AddListener(() => setCurrentBrushTool(EditorTool.extrude));
-        CutButton.onClick.AddListener(() => setCurrentBrushTool(EditorTool.cut));
+        SelectElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.select));
+        InsertElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.insert));
+        EditElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.edit));
+        DeleteElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.delete));
+        ExtrudeButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.extrude));
 
     }
 
     // ===================================================================================================================
     // getter and setter for currentBrushTool
-    public EditorTool getCurrentBrushTool()
+    public EditorTool getCurrentEditorTool()
     {
-        return currentBrushTool;
+        return GameManager.Instance.currentEditorTool;
     }
-    public void setCurrentBrushTool(EditorTool brushTool)
+    public void setCurrentEditorTool(EditorTool editorTool)
     {
-        currentBrushTool = brushTool;
+        GameManager.Instance.currentEditorTool = editorTool;
     }
-
+    public EditorTool getLastEditorTool()
+    {
+        return GameManager.Instance.lastEditorTool;
+    }
+    public void setLastEditorTool(EditorTool editorTool)
+    {
+        GameManager.Instance.lastEditorTool = editorTool;
+    }
 
 
     // ======================================== 
-    public void HandleBrushKitSwitch()
+    public void HandleEditorToolSwitch()
     {
-        EditorTool currentBrushTool = getCurrentBrushTool();
+        EditorTool currentEditorTool = getCurrentEditorTool();
+        EditorTool lastEditorTool = getLastEditorTool();
 
-        if (currentBrushTool != lastBrushTool)
+        if (currentEditorTool != lastEditorTool)
         {
 
-            Debug.Log("Current Brush Tool: " + currentBrushTool);
+            Debug.Log("Current Brush Tool: " + currentEditorTool);
+            if(currentEditorTool == EditorTool.select && !isSelected)
+            {
+                Debug.Log("<color=green>select an element from screen.</color>");
 
-            // 1 time message for the user!
-            if (currentBrushTool == EditorTool.extrude)
-            {
-                Debug.Log("<color=green>Extrude Tool, Choose Vertix(V)/Edge(E)/Face(F)</color>");
-                userExtrusion.UnlockExtrusion();
             }
-            else if (currentBrushTool == EditorTool.cut)
+            else if (currentEditorTool == EditorTool.insert && !isSelected)
             {
-                //Cut a selected object
-                Debug.Log("<color=green>Cut Tool, Choose Vertix(V)/Edge(E)/Face(F)</color>");
+                Debug.Log("<color=green>Insert an element</color>");
+            }
+            else if(currentEditorTool == EditorTool.edit && !isSelected)
+            {
+                Debug.Log("<color=green>Edit an element</color>");
+            }
+            else if (currentEditorTool == EditorTool.delete && !isSelected)
+            {
+                Debug.Log("<color=green>Delete an element</color>");
+            }
+            else if (currentEditorTool == EditorTool.extrude && !isSelected)
+            {
+                Debug.Log("<color=green>Extrude an element</color>");
             }
             else
             {
+                Debug.Log("<color=red>Invalid Brush Tool</color>");
             }
-            lastBrushTool = currentBrushTool;
-            GameManager.Instance.SetCurrentBrushTool(currentBrushTool);
+            setLastEditorTool(currentEditorTool);
+            setCurrentEditorTool(currentEditorTool);
+
         }
     }
 
-    // handle the object extrude mode
-/*    public SelectingMode HandleExtrudeMode()
-    {
-        // select the object
-        SelectingMode currentSelectingMode = SelectingMode.none;
-
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            Debug.Log("Vertix Selected");
-            currentSelectingMode = SelectingMode.Vertex;
-
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Edge Selected");
-            currentSelectingMode = SelectingMode.Edge;
-        }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("Face Selected");
-            currentSelectingMode = SelectingMode.Face;
-            ExtrudeFaces();
-
-        }
-        else
-        {
-            currentSelectingMode = SelectingMode.none;
-        }
-
-        return currentSelectingMode;
-    }*/
-
-
-
-    /*public void ExtrudeFaces()
+    public void CheckActiveMesh()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
         if (gameObject == null)
         {
-            Debug.LogError("No Game Object Selected");
+            /*Debug.LogError("No Game Object Selected");*/
             return;
         }
-
-        ProBuilderMesh pbMesh = gameObject.GetComponent<ProBuilderMesh>();
-
-        // Ensure we have a valid ProBuilder mesh
-        if (pbMesh == null)
+        else
         {
-            Debug.LogError("No ProBuilderMesh component found on this GameObject.");
-            return;
+            if (GameManager.Instance.IsItAMesh(gameObject))
+            {
+                editorMenu.enabled = true;
+            }
+            else
+            {
+                editorMenu.enabled = false;
+            }
         }
+    }
 
-        // Ensure the mesh is valid
-        if (!pbMesh)
-        {
-            Debug.LogError("ProBuilderMesh is not valid.");
-            return;
-        }
-
-        // Ensure there are faces to extrude
-        if (pbMesh.faces == null || pbMesh.faces.Count == 0)
-        {
-            Debug.LogError("No faces found in the ProBuilderMesh.");
-            return;
-        }
-
-        // Debug: Log the face indices
-        foreach (var face in pbMesh.faces)
-        {
-            Debug.Log($"Face Index: {face.indexes.ToString()}");
-        }
-
-        // Define the extrude distance
-        float extrudeDistance = 10.0f;
-
-        try
-        {
-            // Perform the extrusion
-            pbMesh.faces = ExtrudeElements.Extrude(pbMesh, pbMesh.faces, ExtrudeMethod.FaceNormal, extrudeDistance);
-            pbMesh.ToMesh();
-            pbMesh.Refresh();
-        }
-        catch (KeyNotFoundException knfe)
-        {
-            Debug.LogError($"Extrusion failed due to a missing key in the dictionary: {knfe.Message}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Extrusion failed: {e.Message}");
-        }
-    }*/
-
-
-    /*public void ExtrudeFaces()
+    public void HandleEditorTools()
     {
-        // Create a new cube primitive
-        var mesh = ShapeGenerator.CreateShape(ShapeType.Cube);
+        EditorTool currentEditorTool = getCurrentEditorTool();
+        EditorTool lastEditorTool = getLastEditorTool();
 
-        // Extrude the first available face along it's normal direction by 1 meter.
-        mesh.Extrude(new Face[] { mesh.faces.First() }, ExtrudeMethod.FaceNormal, 1f);
+        if (currentEditorTool == EditorTool.select)
+        {
+            // nothing but update selectModeToEdit which already done
+        }
+        else if (currentEditorTool == EditorTool.insert)
+        {
+            // userInsertEditor.HandleInsert();
+        }
+        else if (currentEditorTool == EditorTool.edit)
+        {
+            // userEditEditor.HandleEdit();
+        }
+        else if (currentEditorTool == EditorTool.delete)
+        {
+            // userDeleteEditor.HandleDelete();
+        }
+        else if (currentEditorTool == EditorTool.extrude)
+        {
+            userExtrusion.HandleExtrusion();
+        }
+    }
 
-        // Apply the changes back to the `MeshFilter.sharedMesh`.
-        // 1. ToMesh cleans the UnityEngine.Mesh and assigns vertices and sub-meshes.
-        // 2. Refresh rebuilds generated mesh data, ie UVs, Tangents, Normals, etc.
-        // 3. (Optional, Editor only) Optimize merges coincident vertices, and rebuilds lightmap UVs.
-        mesh.ToMesh();
-        mesh.Refresh();
-        mesh.Optimize();
-    }*/
-
-
-    
 
 
 

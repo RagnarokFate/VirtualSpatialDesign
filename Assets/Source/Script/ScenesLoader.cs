@@ -91,5 +91,12 @@ public class ScenesLoader : MonoBehaviour
 
     }
 
+
+    // ===================== Settings Scene =====================
+    public void LoadSettingsScene()
+    {
+        SceneManager.LoadScene("Settings");
+    }
+
 }
 

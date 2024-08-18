@@ -17,6 +17,7 @@ public class UserDrawment
     public UserDrawment()
     {
         GameObject gameObject = new GameObject("DrawObject");
+        drawLine = gameObject.AddComponent<DrawLine>();
     }
 
     public void SetDrawObject(DrawObject drawObject)
@@ -38,7 +39,7 @@ public class UserDrawment
                 // print the point position and it's index in vertices array
                 Debug.Log("Point Index: " + vertices.Count + "Point Position: " + point_pos);
                 vertices.Add(point_pos);
-
+                drawLine.UpdateLine(point_pos);
             }
         }
         if (Input.GetMouseButtonDown(1))
@@ -77,12 +78,13 @@ public class UserDrawment
             gameObject.tag = "Selectable";
             gameObject.AddComponent<MeshCollider>().convex = true;
 
-            gameObject.AddComponent<Rigidbody>();
+            // gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveGameObject(gameObject);
             GameManager.Instance.twoD_Counter++;
             vertices.Clear();
+            drawLine.DestroyLine();
 
 
         }

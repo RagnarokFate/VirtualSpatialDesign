@@ -71,7 +71,7 @@ Material:
     - _ColorWriteMask: 15
     - _CullMode: 2
     - _CustomMode: 1
-    - _Cutoff: 0.416
+    - _Cutoff: 0.382
     - _DirectionalLight: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 1
@@ -103,7 +103,7 @@ Material:
     - _IridescenceAngle: -0.78
     - _IridescenceIntensity: 0.5
     - _IridescenceThreshold: 0.05
-    - _Metallic: 1
+    - _Metallic: 0
     - _MipmapBias: -2
     - _Mode: 1
     - _NPR: 0
@@ -121,7 +121,7 @@ Material:
     - _RoundCornerRadius: 0.25
     - _RoundCorners: 0
     - _RoundCornersHideInterior: 0
-    - _Smoothness: 0.337
+    - _Smoothness: 0.376
     - _SpecularHighlights: 1
     - _SphericalHarmonics: 0
     - _SrcBlend: 1
@@ -146,7 +146,7 @@ Material:
     - _BlurBackgroundRect: {r: 0, g: 0, b: 1, a: 1}
     - _BorderColor: {r: 1, g: 1, b: 1, a: 0}
     - _ClippingBorderColor: {r: 1, g: 0.19999996, b: 0, a: 1}
-    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _EmissiveColor: {r: 0.4245283, g: 0, b: 0, a: 1}
     - _EnvironmentColorX: {r: 1, g: 0, b: 0, a: 1}
     - _EnvironmentColorY: {r: 0, g: 1, b: 0, a: 1}
