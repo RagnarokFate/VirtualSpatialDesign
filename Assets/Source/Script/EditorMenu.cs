@@ -133,6 +133,8 @@ public class EditorMenu : MonoBehaviour
             else if (currentEditorTool == EditorTool.extrude && !isSelected)
             {
                 Debug.Log("<color=green>Extrude an element</color>");
+                GameManager.Instance.selectModeToEdit = SelectModeToEdit.Face;
+                Debug.Log("<color=purple>Face Mode FORCE | ENABLED</color>");
             }
             else
             {
@@ -188,6 +190,7 @@ public class EditorMenu : MonoBehaviour
         }
         else if (currentEditorTool == EditorTool.extrude)
         {
+
             userExtrusion.HandleExtrusion();
         }
     }

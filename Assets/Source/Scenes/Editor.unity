@@ -2167,6 +2167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 817102068}
   - component: {fileID: 817102069}
+  - component: {fileID: 817102070}
   m_Layer: 5
   m_Name: VerticesViewToggle
   m_TagString: Untagged
@@ -2241,8 +2242,35 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 817102070}
+        m_TargetAssemblyTypeName: VisualizeElements, Assembly-CSharp
+        m_MethodName: ToggleVertices
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!114 &817102070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817102067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fc20c2e72c67c4dbbd26c7b360d7c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vertexPrefab: {fileID: 3931387375628106893, guid: ba5ac9813c81b514581abfb70484607a, type: 3}
+  vertexToggle: {fileID: 817102069}
+  gridToggle: {fileID: 995395781}
 --- !u!1 &821082531
 GameObject:
   m_ObjectHideFlags: 0
@@ -2994,6 +3022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 995395780}
   - component: {fileID: 995395781}
+  - component: {fileID: 995395782}
   m_Layer: 5
   m_Name: GridViewToggle
   m_TagString: Untagged
@@ -3068,8 +3097,35 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 995395782}
+        m_TargetAssemblyTypeName: VisualizeElements, Assembly-CSharp
+        m_MethodName: ToggleGrid
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!114 &995395782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995395779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fc20c2e72c67c4dbbd26c7b360d7c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vertexPrefab: {fileID: 3931387375628106893, guid: ba5ac9813c81b514581abfb70484607a, type: 3}
+  vertexToggle: {fileID: 817102069}
+  gridToggle: {fileID: 995395781}
 --- !u!1 &999857153
 GameObject:
   m_ObjectHideFlags: 0
@@ -3223,7 +3279,7 @@ GameObject:
   - component: {fileID: 1102040322}
   - component: {fileID: 1102040321}
   m_Layer: 5
-  m_Name: PushPullKit
+  m_Name: EditorMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3248,8 +3304,8 @@ RectTransform:
   - {fileID: 655548987}
   - {fileID: 1949303606}
   - {fileID: 2029117259}
-  - {fileID: 817102068}
   - {fileID: 995395780}
+  - {fileID: 817102068}
   m_Father: {fileID: 1156063085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4557,7 +4613,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754781739}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b36b25bd862627b4e82e37221a644a9b, type: 3}
   m_Name: 

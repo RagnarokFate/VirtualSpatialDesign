@@ -1,25 +1,19 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEngine.ProBuilder.Shapes;
 
 public class UserExtrusion
 {
     private bool locked;
     private Vector2 initialMousePos;
-    private float initialExtrusion;
+    private float extrusionValue;
     private bool isExtruding;
-
-
 
     public bool meshExtrusionLock;
     public float extrusionSensitivity = 0.1f;
+
+    private Face selectedFace;
 
     public UserExtrusion()
     {
@@ -28,102 +22,87 @@ public class UserExtrusion
         isExtruding = false;
     }
 
-    //reset back object color upon deselecting/unclicking Active GameObject
+    // Reset the object color upon deselecting/unclicking Active GameObject
     public void HandleExtrusion()
     {
-        if (Input.GetMouseButtonDown(0))
-        {            
-            ProBuilderMesh pbMesh = GameManager.Instance.activeGameObject.GetComponent<ProBuilderMesh>();
-
-            // List<Face> facesToExtrude = GameManager.Instance.editorfaces;
-            List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0] };
-            // List<Face> facesToExtrude = new List<Face> { pbMesh.faces[0], pbMesh.faces[1] };
-
-
-            float extrusionFactor = 1.0f;
-
-            pbMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, extrusionFactor);
-            pbMesh.ToMesh();
-            pbMesh.Refresh();
-
-        }
-
-    }
-
-    /*public void HandleExtrusion()
-    {
-        GameManager.Instance.currentTransformTool = TransformTool.none;
-        GameManager.Instance.currentMainTool = MainTool.none;
-
         GameObject gameObject = GameManager.Instance.activeGameObject;
 
         if (gameObject != null)
         {
+            ProBuilderMesh proBuilderMesh = gameObject.GetComponent<ProBuilderMesh>();
+            if (proBuilderMesh == null)
+            {
+                Debug.LogError("No ProBuilderMesh component found on this GameObject.");
+                return;
+            }
 
             Vector2 mousePos = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                float extrusionFactor;
-                if (Input.GetMouseButtonDown(0)) // Start Extrusion on mouse down
+                // Left-click to select a face
+                if (Input.GetMouseButtonDown(0) && !locked)
                 {
-                    extrusionFactor = 0.0f;
+                    selectedFace = new UserSelectEditor(proBuilderMesh).getCloestFace(hit.point);
+                    if (selectedFace != null)
+                    {
+                        Debug.Log("Selected Face: " + selectedFace);
+                        proBuilderMesh.SetFaceColor(selectedFace, Color.red);
+                        locked = true;
+                    }
+                }
+
+                // Right-click to deselect the face
+                if (Input.GetMouseButtonDown(1) && locked)
+                {
+                    if (selectedFace != null)
+                    {
+                        proBuilderMesh.SetFaceColor(selectedFace, Color.white);
+                    }
+                    locked = false;
+                }
+
+                // Start extrusion on left-click and hold
+                if (Input.GetMouseButtonDown(0) && locked && selectedFace != null)
+                {
                     initialMousePos = mousePos;
-                    initialExtrusion = 0.0f;
+                    extrusionValue = 0f;
                     isExtruding = true;
                 }
 
-                if (Input.GetMouseButton(0) && isExtruding) // Continue Extrusion while holding mouse button
+                // Continue extrusion while holding the left mouse button
+                if (Input.GetMouseButton(0) && isExtruding && selectedFace != null)
                 {
                     Vector2 mouseDelta = mousePos - initialMousePos;
-                    extrusionFactor = mouseDelta.magnitude; // Adjust Extrusion sensitivity              
+                    float mouseMagnitude = mouseDelta.magnitude;
+                    extrusionValue = mouseMagnitude * extrusionSensitivity;
 
+                    // Optional: Preview the extrusion in real-time
+                    List<Face> facesToExtrude = new List<Face> { selectedFace };
+                    proBuilderMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, extrusionValue);
+                    proBuilderMesh.ToMesh();
+                    proBuilderMesh.Refresh();
                 }
 
-                if (Input.GetMouseButtonUp(0)) // Stop Extrusion on mouse up
+                // Stop extrusion on left mouse button release
+                if (Input.GetMouseButtonUp(0) && isExtruding && selectedFace != null)
                 {
+                    Debug.Log("Final Extrusion Value: " + extrusionValue);
+
                     isExtruding = false;
+                    locked = false;
 
-                    ProBuilderMesh pbMesh = gameObject.GetComponent<ProBuilderMesh>();
+                    // Optionally finalize the extrusion (repeating the extrusion step to apply it)
+                    List<Face> facesToExtrude = new List<Face> { selectedFace };
+                    proBuilderMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, extrusionValue);
 
-                    // Ensure we have a valid ProBuilder mesh
-                    if (pbMesh == null)
-                    {
-                        Debug.LogError("No ProBuilderMesh component found on this GameObject.");
-                        return;
-                    }
-                    // Get all faces of the mesh
-                    var faces = pbMesh.faces;
-
-                    try
-                    {
-                        // Perform the extrusion
-                        //pbMesh.Extrude(faces, ExtrudeMethod.FaceNormal, extrusionFactor);
-
-                        pbMesh.faces = ExtrudeElements.Extrude(pbMesh, pbMesh.faces, ExtrudeMethod.FaceNormal, 10.0f);
-
-                        pbMesh.ToMesh();
-                        pbMesh.Refresh();
-                    }
-                    catch (KeyNotFoundException knfe)
-                    {
-                        Debug.LogError($"Extrusion failed due to a missing key in the dictionary: {knfe.Message}");
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError($"Extrusion failed: {e.Message}");
-                    }
+                    proBuilderMesh.ToMesh();
+                    proBuilderMesh.Refresh();
                 }
             }
-
-
         }
-        else
-        {
-            return;
-        }
-
-    }*/
+    }
 
     public void LockExtrusion()
     {
@@ -134,5 +113,4 @@ public class UserExtrusion
     {
         meshExtrusionLock = false;
     }
-
 }

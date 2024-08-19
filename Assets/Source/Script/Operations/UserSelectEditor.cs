@@ -33,7 +33,7 @@ public class UserSelectEditor
         faces = mesh.faces.ToList();
 
         // edges = mesh.edgeCount > 0 ? mesh.edges.ToList() : new List<Vector2>();
-        // edges = GenerateEdges(vertices, mesh.faces.Select(f => f.indexes).ToList());
+        //edges = GenerateEdges(vertices, mesh.faces);
     }
 
     public Vector3 getCloestVertex(Vector3 point)
@@ -61,14 +61,14 @@ public class UserSelectEditor
         return center / face.indexes.Count;
     }
 
-    public static List<Vector2Int> GenerateEdges(List<Vector3> vertices, List<int[]> faces)
+    public static List<Vector2Int> GenerateEdges(List<Vector3> vertices, List<Face> faces)
     {
         HashSet<Vector2Int> edges = new HashSet<Vector2Int>();
 
         // Iterate over each face
         foreach (var face in faces)
         {
-            int faceVertexCount = face.Length;
+            int faceVertexCount = face.indexes.Count;
 
             // Iterate over each vertex in the face
             for (int i = 0; i < faceVertexCount; i++)

@@ -19,7 +19,8 @@ public class UserSelection
     {
         highlightMaterial = highlightInputMaterial;
         selectionMaterial = selectionInputMaterial;
-        defaultMaterial = new Material(Shader.Find("Standard"));
+
+        defaultMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
     }
 
     // Add these fields to store the default material of the highlighted and selected objects separately
