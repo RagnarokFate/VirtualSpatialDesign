@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 using UnityEngine.SceneManagement;
 
 public class ScenesLoader : MonoBehaviour
 {
-    private Vector3 tempPosition;
 
     // ================== Edit Mode Scene ==================
     public void LoadEditModeScene()
@@ -36,6 +36,8 @@ public class ScenesLoader : MonoBehaviour
         {
             if (gameObject == GameManager.Instance.activeGameObject)
             {
+                // render the mesh with transparent material
+                gameObject.SetActive(true);
                 continue;
             }
             gameObject.SetActive(false);
@@ -44,7 +46,7 @@ public class ScenesLoader : MonoBehaviour
 
     public void StoreObjectTransform()
     {
-        tempPosition = GameManager.Instance.activeGameObject.transform.position;
+        GameManager.Instance.tempPosition = GameManager.Instance.activeGameObject.transform.position;
     }
 
 
@@ -80,7 +82,7 @@ public class ScenesLoader : MonoBehaviour
 
     public void LoadObjectTransform()
     {
-        GameManager.Instance.activeGameObject.transform.position = tempPosition;
+        GameManager.Instance.activeGameObject.transform.position = GameManager.Instance.tempPosition;
     }
 
     protected void resetTools()
@@ -96,6 +98,13 @@ public class ScenesLoader : MonoBehaviour
     public void LoadSettingsScene()
     {
         SceneManager.LoadScene("Settings");
+    }
+
+
+    // ===================== Start Scene =====================
+    public void LoadWelcomeScene()
+    {
+        SceneManager.LoadScene("Welcome");
     }
 
 }

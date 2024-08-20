@@ -77,6 +77,11 @@ public class GameManager : MonoBehaviour
     public int twoD_Counter;
     public int threeD_Counter;
 
+    //scene switches
+    public Vector3 tempPosition;
+
+
+
     public void AddGameObject(GameObject obj)
     {
         if (!gameObjectList.Contains(obj))

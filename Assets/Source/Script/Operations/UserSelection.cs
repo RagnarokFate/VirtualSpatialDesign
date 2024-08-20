@@ -21,6 +21,7 @@ public class UserSelection
         selectionMaterial = selectionInputMaterial;
 
         defaultMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+
     }
 
     // Add these fields to store the default material of the highlighted and selected objects separately
@@ -38,6 +39,7 @@ public class UserSelection
             {
                 // Restore the default material of the previously selected object
                 selectedObject.GetComponent<MeshRenderer>().material = selectedObjectDefaultMaterial;
+                selectedObject.GetComponent<MeshRenderer>().sharedMaterial = selectedObjectDefaultMaterial;
             }
 
             if (highlightedObject != null)
@@ -68,6 +70,7 @@ public class UserSelection
         {
             // Restore the default material of the previously highlighted object
             highlightedObject.GetComponent<MeshRenderer>().sharedMaterial = highlightedObjectDefaultMaterial;
+            highlightedObject.GetComponent<MeshRenderer>().material = highlightedObjectDefaultMaterial;
             highlightedObject = null;
         }
 

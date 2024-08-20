@@ -57,7 +57,7 @@ public class VisualizeElements : MonoBehaviour
 
     public void ToggleGrid()
     {
-        if (gridToggle.isOn is true)
+        if (gridToggle.isOn)
         {
             GameObject gameObject = GameManager.Instance.activeGameObject;
             if (gameObject != null)
@@ -65,28 +65,32 @@ public class VisualizeElements : MonoBehaviour
                 ProBuilderMesh mesh = gameObject.GetComponent<ProBuilderMesh>();
                 if (mesh != null)
                 {
-                    GameObject gridGameObject = new GameObject("Grid Game Object");
-                    gridGameObject.transform.SetParent(gridRootParent.transform);
-                    LineRenderer lineRenderer = gridGameObject.AddComponent<LineRenderer>();
+                    // Parent GameObject to hold all face grids
+                    GameObject gridParent = new GameObject("Grid GameObject Parent");
+                    gridParent.transform.SetParent(gridRootParent.transform);
 
-                    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-                    lineRenderer.startColor = Color.green;
-                    lineRenderer.endColor = Color.green;
-                    lineRenderer.startWidth = 0.01f;
-                    lineRenderer.endWidth = 0.01f;
-
-
-                    for (int i = 0; i < mesh.faces.Count; i++)
+                    foreach (Face face in mesh.faces)
                     {
-                        Face face = mesh.faces[i];
-                        
-                        for (int j = 0; j < face.indexes.Count; j++)
+                        // Create a GameObject for each face
+                        GameObject gridGameObject = new GameObject("Grid GameObject Face");
+                        gridGameObject.transform.SetParent(gridParent.transform);
+
+                        LineRenderer lineRenderer = gridGameObject.AddComponent<LineRenderer>();
+                        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+                        lineRenderer.startColor = Color.green;
+                        lineRenderer.endColor = Color.green;
+                        lineRenderer.startWidth = 0.01f;
+                        lineRenderer.endWidth = 0.01f;
+                        lineRenderer.loop = true;
+
+                        // Set the positions for the vertices of the face
+                        int vertexCount = face.indexes.Count;
+                        lineRenderer.positionCount = vertexCount;
+                        for (int j = 0; j < vertexCount; j++)
                         {
                             Vector3 vertex = mesh.positions[face.indexes[j]];
-                            lineRenderer.positionCount = face.indexes.Count + 1;
                             lineRenderer.SetPosition(j, vertex);
                         }
-                        lineRenderer.SetPosition(face.indexes.Count, mesh.positions[face.indexes[0]]);
                     }
 
                     gameObject.SetActive(false);
@@ -103,8 +107,8 @@ public class VisualizeElements : MonoBehaviour
             }
             gameObject.SetActive(true);
         }
-
     }
+
 
 
 }

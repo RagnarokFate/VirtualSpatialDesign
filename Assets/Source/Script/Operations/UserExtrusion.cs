@@ -48,7 +48,9 @@ public class UserExtrusion
                     if (selectedFace != null)
                     {
                         Debug.Log("Selected Face: " + selectedFace);
-                        proBuilderMesh.SetFaceColor(selectedFace, Color.red);
+                        proBuilderMesh.SetFaceColor(selectedFace, Color.yellow);
+                        proBuilderMesh.ToMesh();
+                        proBuilderMesh.Refresh();
                         locked = true;
                     }
                 }
@@ -58,7 +60,7 @@ public class UserExtrusion
                 {
                     if (selectedFace != null)
                     {
-                        proBuilderMesh.SetFaceColor(selectedFace, Color.white);
+                        proBuilderMesh.SetFaceColor(selectedFace, Color.magenta);
                     }
                     locked = false;
                 }
