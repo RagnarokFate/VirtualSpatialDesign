@@ -7,30 +7,30 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
-public class UserExtrusion
+public class UserInclusion
 {
     private bool locked;
     private Vector2 initialMousePos;
-    private float extrusionValue;
-    private float finalExtrusionValue;
-    private bool isExtruding;
+    private float inclusionValue;
+    private float finalInclusionnValue;
+    private bool isInclusing;
 
-    public bool meshExtrusionLock;
-    public float extrusionSensitivity = 0.01f;
+    public bool meshInclusionLock;
+    public float InclusionSensitivity = 0.01f;
 
     private Face selectedFace;
 
     private List<Vector3> previousVerticesValues;
     private List<Face> previousFacesValues;
-    public UserExtrusion()
+    public UserInclusion()
     {
-        meshExtrusionLock = false;
+        meshInclusionLock = false;
         locked = false;
-        isExtruding = false;
+        isInclusing = false;
     }
 
     // Reset the object color upon deselecting/unclicking Active GameObject
-    public void HandleExtrusion()
+    public void HandleInclusion()
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
 
@@ -60,7 +60,7 @@ public class UserExtrusion
                         proBuilderMesh.Refresh();
                         locked = true;
                     }
-                    finalExtrusionValue = 0f;
+                    finalInclusionnValue = 0f;
                 }
 
                 // Right-click to deselect the face
@@ -73,53 +73,53 @@ public class UserExtrusion
                     locked = false;
                 }
 
-                // Start extrusion on left-click and hold
+                // Start Inclusion on left-click and hold
                 if (Input.GetMouseButtonDown(0) && locked && selectedFace != null)
                 {
                     initialMousePos = mousePos;
-                    extrusionValue = 0f;
-                    isExtruding = true;
+                    inclusionValue = 0f;
+                    isInclusing = true;
 
                     StorePreviousValues(proBuilderMesh);
                 }
 
-                // Continue extrusion while holding the left mouse button
-                if (Input.GetMouseButton(0) && isExtruding && selectedFace != null)
+                // Continue Inclusion while holding the left mouse button
+                if (Input.GetMouseButton(0) && isInclusing && selectedFace != null)
                 {
 
                     Vector2 mouseDelta = mousePos - initialMousePos;
                     float mouseMagnitude = mouseDelta.magnitude;
-                    extrusionValue = mouseMagnitude * extrusionSensitivity;
+                    inclusionValue = mouseMagnitude * InclusionSensitivity;
 
                     // Optional: Preview the extrusion in real-time
                     List<Face> facesToExtrude = new List<Face> { selectedFace };
-                    proBuilderMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, extrusionValue);
+                    proBuilderMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, -inclusionValue);
                     proBuilderMesh.ToMesh();
                     proBuilderMesh.Refresh();
                     initialMousePos = Input.mousePosition;
-                    finalExtrusionValue += extrusionValue;
+                    finalInclusionnValue += inclusionValue;
 
                 }
 
                 // Stop extrusion on left mouse button release
-                if (Input.GetMouseButtonUp(0) && isExtruding && selectedFace != null)
+                if (Input.GetMouseButtonUp(0) && isInclusing && selectedFace != null)
                 {
-                    Debug.Log("Final Extrusion Value: " + finalExtrusionValue);
+                    Debug.Log("Final Extrusion Value: " + finalInclusionnValue);
                     
-                    isExtruding = false;
+                    isInclusing = false;
                     locked = false;
 
                     RestorePreviousValues(proBuilderMesh);
                     // Optional: Preview the extrusion in real-time
                     List<Face> facesToExtrude = new List<Face> { selectedFace };
-                    proBuilderMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, finalExtrusionValue);
+                    proBuilderMesh.Extrude(facesToExtrude, ExtrudeMethod.FaceNormal, -finalInclusionnValue);
                     proBuilderMesh.ToMesh();
                     proBuilderMesh.Refresh();
 
 
-                    if (extrusionValue == 0.0f)
+                    if (inclusionValue == 0.0f)
                     {
-                        finalExtrusionValue = 0f;
+                        finalInclusionnValue = 0f;
                         return;
                     }
                     
@@ -133,14 +133,14 @@ public class UserExtrusion
 
     
 
-    public void LockExtrusion()
+    public void LockInclusion()
     {
-        meshExtrusionLock = true;
+        meshInclusionLock = true;
     }
 
-    public void UnlockExtrusion()
+    public void UnlockInclusion()
     {
-        meshExtrusionLock = false;
+        meshInclusionLock = false;
     }
 
     private void StorePreviousValues(ProBuilderMesh mesh)

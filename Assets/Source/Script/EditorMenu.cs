@@ -22,7 +22,8 @@ public class EditorMenu : MonoBehaviour
     private Button InsertElementButton;
     private Button EditElementButton;
     private Button DeleteElementButton;
-    private Button ExtrudeButton;
+    private Button PullButton;
+    private Button PushButton;
 
     private Canvas editorMenu;
 
@@ -35,8 +36,9 @@ public class EditorMenu : MonoBehaviour
     public UserInsertEditor userInsertEditor;
     public UserEditEditor userEditEditor;
     public UserDeleteEditor userDeleteEditor;*/
-
+    public UserSelectEditor userSelectEditor;
     public UserExtrusion userExtrusion;
+    public UserInclusion userInclusion;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +48,10 @@ public class EditorMenu : MonoBehaviour
 
         // profile users interaction
         userExtrusion = new UserExtrusion();
+        userInclusion = new UserInclusion();
+        userSelectEditor = new UserSelectEditor();
+        userSelectEditor.setPrefabs(Vertex);
+
 
     }
 
@@ -73,13 +79,15 @@ public class EditorMenu : MonoBehaviour
         InsertElementButton = GameObject.Find("InsertElementButton").GetComponent<Button>();
         EditElementButton = GameObject.Find("EditElementButton").GetComponent<Button>();
         DeleteElementButton = GameObject.Find("DeleteElementButton").GetComponent<Button>();
-        ExtrudeButton = GameObject.Find("ExtrudeButton").GetComponent<Button>();
+        PullButton = GameObject.Find("PullButton").GetComponent<Button>();
+        PushButton = GameObject.Find("PushButton").GetComponent<Button>();
 
         SelectElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.select));
         InsertElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.insert));
         EditElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.edit));
         DeleteElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.delete));
-        ExtrudeButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.extrude));
+        PullButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.pull));
+        PushButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.push));
 
     }
 
@@ -130,9 +138,15 @@ public class EditorMenu : MonoBehaviour
             {
                 Debug.Log("<color=green>Delete an element</color>");
             }
-            else if (currentEditorTool == EditorTool.extrude && !isSelected)
+            else if (currentEditorTool == EditorTool.pull && !isSelected)
             {
-                Debug.Log("<color=green>Extrude an element</color>");
+                Debug.Log("<color=green>Pull an element</color>");
+                GameManager.Instance.selectModeToEdit = SelectModeToEdit.Face;
+                Debug.Log("<color=purple>Face Mode FORCE | ENABLED</color>");
+            }
+            else if (currentEditorTool == EditorTool.push && !isSelected)
+            {
+                Debug.Log("<color=green>Push an element</color>");
                 GameManager.Instance.selectModeToEdit = SelectModeToEdit.Face;
                 Debug.Log("<color=purple>Face Mode FORCE | ENABLED</color>");
             }
@@ -175,6 +189,8 @@ public class EditorMenu : MonoBehaviour
         if (currentEditorTool == EditorTool.select)
         {
             // nothing but update selectModeToEdit which already done
+            userSelectEditor.setProBuilderToUserSelectEditor();
+            userSelectEditor.HandleEditorSelection();
         }
         else if (currentEditorTool == EditorTool.insert)
         {
@@ -188,10 +204,13 @@ public class EditorMenu : MonoBehaviour
         {
             // userDeleteEditor.HandleDelete();
         }
-        else if (currentEditorTool == EditorTool.extrude)
+        else if (currentEditorTool == EditorTool.pull)
         {
-
             userExtrusion.HandleExtrusion();
+        }
+        else if (currentEditorTool == EditorTool.push)
+        {
+            userInclusion.HandleInclusion();
         }
     }
 

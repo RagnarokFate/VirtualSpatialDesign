@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UserSelectEditor
 {
@@ -14,6 +15,13 @@ public class UserSelectEditor
     private Vector3 selectedVertex;
     private Vector2 selectedEdge;
     private Face selectedFace;
+
+    //prefab
+    private GameObject selectedVertexPrefab;
+
+    private GameObject vertexGameObject;
+    private GameObject edgeGameObject;
+    private GameObject faceGameObject;
 
     public UserSelectEditor()
     {
@@ -34,6 +42,117 @@ public class UserSelectEditor
 
         // edges = mesh.edgeCount > 0 ? mesh.edges.ToList() : new List<Vector2>();
         //edges = GenerateEdges(vertices, mesh.faces);
+    }
+
+    public void setProBuilderToUserSelectEditor()
+    {
+        ProBuilderMesh mesh = GameManager.Instance.activeGameObject.GetComponent<ProBuilderMesh>();
+        if (mesh == null)
+        {
+            Debug.LogError("No ProBuilderMesh component found on this GameObject.");
+            return;
+        }
+        vertices = mesh.positions.ToList();
+        faces = mesh.faces.ToList();
+    }
+
+    public void setPrefabs(GameObject selectedVertexPrefab)
+    {
+        this.selectedVertexPrefab = selectedVertexPrefab;
+    }
+
+    public void HandleEditorSelection()
+    {
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if (GameManager.Instance.activeGameObject == null)
+        {
+            return;
+        }
+        ProBuilderMesh proBuilderMesh = gameObject.GetComponent<ProBuilderMesh>();
+        if (proBuilderMesh == null)
+        {
+            Debug.LogError("No ProBuilderMesh component found on this GameObject.");
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePosition = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == gameObject)
+            {
+
+                HandleEditorSelectionOnPoint(hit.point);
+            }
+        }
+    }
+
+    public void HandleEditorSelectionOnPoint(Vector3 point)
+    {
+        selectedVertex = getCloestVertex(point);
+        //selectedEdge = getCloestEdge(point);
+        selectedFace = getCloestFace(point);
+
+        ClearSelection();
+
+        if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Vertex)
+        {
+            vertexGameObject = GameObject.Instantiate(selectedVertexPrefab, selectedVertex, Quaternion.identity);
+            vertexGameObject.name = "Vertex";
+
+            Debug.Log("Selected Vertex: " + selectedVertex);
+        }
+        else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Edge)
+        {
+            edgeGameObject = new GameObject("Edge");
+            LineRenderer lineRenderer = edgeGameObject.AddComponent<LineRenderer>();
+            lineRenderer.positionCount = 2;
+            lineRenderer.SetPosition(0, vertices[(int)selectedEdge.x]);
+            lineRenderer.SetPosition(1, vertices[(int)selectedEdge.y]);
+            lineRenderer.startWidth = 0.1f;
+            lineRenderer.endWidth = 0.1f;
+            lineRenderer.startColor = new Color32(70, 184, 163, 255);
+            lineRenderer.endColor = new Color32(70, 184, 163, 255);
+        }
+        else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Face)
+        {
+            faceGameObject = new GameObject("Face");
+            LineRenderer lineRenderer = faceGameObject.AddComponent<LineRenderer>();
+            lineRenderer.positionCount = selectedFace.indexes.Count + 1;
+            for (int i = 0; i < selectedFace.indexes.Count; i++)
+            {
+                lineRenderer.SetPosition(i, vertices[selectedFace.indexes[i]]);
+            }
+            lineRenderer.SetPosition(selectedFace.indexes.Count, vertices[selectedFace.indexes[0]]);
+            lineRenderer.startWidth = 0.01f;
+            lineRenderer.endWidth = 0.01f;
+            lineRenderer.startColor = new Color32(163, 184, 70, 255);
+            lineRenderer.endColor = new Color32(163, 184, 70 , 255);
+
+            lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+
+            Debug.Log("Selected Face: " + selectedFace);
+
+        }
+
+
+
+    }
+    public void ClearSelection()
+    {
+        if (vertexGameObject != null)
+        {
+            GameObject.Destroy(vertexGameObject);
+        }
+        if (edgeGameObject != null)
+        {
+            GameObject.Destroy(edgeGameObject);
+        }
+        if (faceGameObject != null)
+        {
+            GameObject.Destroy(faceGameObject);
+        }
     }
 
     public Vector3 getCloestVertex(Vector3 point)
