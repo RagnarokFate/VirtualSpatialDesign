@@ -2,26 +2,84 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
-using UnityEngine.UI;
 
-public class VisualizeElements : MonoBehaviour
+public class OptionsActions : MonoBehaviour
 {
-    public GameObject vertexPrefab;
+    // Options List - Toggle
+    private bool vertexToggle = false;
+    private bool gridToggle = false;
+
+    public GameObject DotPrefab;
+
     private GameObject vertixRootParent;
     private GameObject gridRootParent;
 
-    // Reference to the Toggle component
-    public Toggle vertexToggle;
-    public Toggle gridToggle;
+    public GameObject OptionsPanelGameObject;
 
+    // Start is called before the first frame update
     void Start()
     {
         this.vertixRootParent = new GameObject("Vertices");
         this.gridRootParent = new GameObject("Grid");
     }
+
+   public void ToggleSubdiviSion()
+   {
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if (gameObject != null)
+        {
+            ProBuilderMesh mesh = gameObject.GetComponent<ProBuilderMesh>();
+            if (mesh != null)
+            {
+                //mesh.Subdivide();
+            }
+        }
+   }
+
+
+    public void ToggleFlipEdges()
+    {
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if (gameObject != null)
+        {
+            ProBuilderMesh mesh = gameObject.GetComponent<ProBuilderMesh>();
+            if (mesh != null)
+            {
+                //mesh.FlipEdges();
+            }
+        }
+    }
+    public void ToggleFlipFaces()
+    {
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if (gameObject != null)
+        {
+            ProBuilderMesh mesh = gameObject.GetComponent<ProBuilderMesh>();
+            if (mesh != null)
+            {
+                //mesh.FlipFaces();
+            }
+        }
+    }
+
+    public void Toggle_Triangualte_ToQuad()
+    {
+        GameObject gameObject = GameManager.Instance.activeGameObject;
+        if (gameObject != null)
+        {
+            ProBuilderMesh mesh = gameObject.GetComponent<ProBuilderMesh>();
+            if (mesh != null)
+            {
+                //mesh.ToMesh();
+            }
+        }
+    }
+
+
     public void ToggleVertices()
     {
-        if (vertexToggle.isOn is true)
+        vertexToggle = !vertexToggle;
+        if (vertexToggle is true)
         {
             GameObject gameObject = GameManager.Instance.activeGameObject;
             if (gameObject != null)
@@ -32,7 +90,7 @@ public class VisualizeElements : MonoBehaviour
                     int counter = 0;
                     foreach (Vector3 vertex in mesh.positions)
                     {
-                        GameObject vertexObject = GameObject.Instantiate(vertexPrefab, vertex, Quaternion.identity);
+                        GameObject vertexObject = GameObject.Instantiate(DotPrefab, vertex, Quaternion.identity);
                         vertexObject.name = "Vertex " + counter;
                         vertexObject.transform.SetParent(vertixRootParent.transform);
                     }
@@ -53,11 +111,13 @@ public class VisualizeElements : MonoBehaviour
                 gameObject.SetActive(true);
             }
         }
+        CloseOptionsPanel();
     }
 
     public void ToggleGrid()
     {
-        if (gridToggle.isOn)
+        gridToggle = !gridToggle;
+        if (gridToggle is true)
         {
             GameObject gameObject = GameManager.Instance.activeGameObject;
             if (gameObject != null)
@@ -107,8 +167,13 @@ public class VisualizeElements : MonoBehaviour
             }
             gameObject.SetActive(true);
         }
+        CloseOptionsPanel();
     }
 
 
-
+    public void CloseOptionsPanel()
+    {
+        OptionsPanelGameObject.SetActive(false);
+        OptionsActionsPanel.OptionsPanel = false;
+    }
 }

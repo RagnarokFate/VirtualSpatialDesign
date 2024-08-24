@@ -16,7 +16,6 @@ public class UserMeasure
     // Simplification tolerance
     public float tolerance;
 
-    private bool isContinuous = false;
     private bool isMeasuring = false;
 
     // Lists to hold data
@@ -53,7 +52,15 @@ public class UserMeasure
 
         if (Physics.Raycast(ray, out hit))
         {
-            Vector3 offset = new Vector3(0, 0.1f, 0);
+            /* Vector3 offset = Camera.main.transform.position - hit.point;
+             if (offset != Vector3.zero)
+             {
+                 offset.Normalize();
+                 offset *= -1;
+             }
+             Vector3 worldPos = hit.point + 2.0f * offset;*/
+            Vector3 offset = Vector3.up * 0.01f;
+            //Vector3 worldPos = (hit.collider.gameObject.name == "Floor") ? hit.point + offset : hit.point + (-0.01f) * new Vector3(1.0f,0.0f,1.0f).normalized;
             Vector3 worldPos = (hit.collider.gameObject.name == "Floor") ? hit.point + offset : hit.point;
 
             if (Input.GetMouseButtonDown(0))

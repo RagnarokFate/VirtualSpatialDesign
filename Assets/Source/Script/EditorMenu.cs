@@ -29,22 +29,20 @@ public class EditorMenu : MonoBehaviour
 
     //Prefabs
     public GameObject Vertex;
-    public GameObject Edge;
-    public GameObject Face;
 
     /*// profile users interaction
     public UserInsertEditor userInsertEditor;
     public UserEditEditor userEditEditor;
     public UserDeleteEditor userDeleteEditor;*/
-    public UserSelectEditor userSelectEditor;
-    public UserExtrusion userExtrusion;
-    public UserInclusion userInclusion;
+    private UserSelectEditor userSelectEditor;
+    private UserExtrusion userExtrusion;
+    private UserInclusion userInclusion;
 
     // Start is called before the first frame update
     void Start()
     {
         editorMenu = GameObject.Find("EditorMenu").GetComponent<Canvas>();
-        editorMenu.enabled = false;
+        //editorMenu.enabled = false;
 
         // profile users interaction
         userExtrusion = new UserExtrusion();
@@ -58,15 +56,9 @@ public class EditorMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckActiveMesh();
+        // CheckActiveMesh();
         HandleEditorToolSwitch();
         HandleEditorTools();
-
-        /*if (currentBrushTool == EditorTool.extrude)
-        {
-            userExtrusion.HandleExtrusion();
-        }*/
-
 
 
 
@@ -82,12 +74,12 @@ public class EditorMenu : MonoBehaviour
         PullButton = GameObject.Find("PullButton").GetComponent<Button>();
         PushButton = GameObject.Find("PushButton").GetComponent<Button>();
 
-        SelectElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.select));
-        InsertElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.insert));
-        EditElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.edit));
-        DeleteElementButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.delete));
-        PullButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.pull));
-        PushButton.onClick.AddListener(() => setCurrentEditorTool(EditorTool.push));
+        SelectElementButton.onClick.AddListener(() => CheckEditorToolSwitch(EditorTool.select));
+        InsertElementButton.onClick.AddListener(() => CheckEditorToolSwitch(EditorTool.insert));
+        EditElementButton.onClick.AddListener(() => CheckEditorToolSwitch(EditorTool.edit));
+        DeleteElementButton.onClick.AddListener(() => CheckEditorToolSwitch(EditorTool.delete));
+        PullButton.onClick.AddListener(() => CheckEditorToolSwitch(EditorTool.pull));
+        PushButton.onClick.AddListener(() => CheckEditorToolSwitch(EditorTool.push));
 
     }
 
@@ -96,6 +88,18 @@ public class EditorMenu : MonoBehaviour
     public EditorTool getCurrentEditorTool()
     {
         return GameManager.Instance.currentEditorTool;
+    }
+    public void CheckEditorToolSwitch(EditorTool editorTool)
+    {
+        if(getCurrentEditorTool() != editorTool)
+        {
+            setCurrentEditorTool(editorTool);
+        }
+        else
+        {
+            Debug.Log("Editor tool has been set to `none`");
+            setCurrentEditorTool(EditorTool.none);
+        }
     }
     public void setCurrentEditorTool(EditorTool editorTool)
     {
@@ -150,10 +154,7 @@ public class EditorMenu : MonoBehaviour
                 GameManager.Instance.selectModeToEdit = SelectModeToEdit.Face;
                 Debug.Log("<color=purple>Face Mode FORCE | ENABLED</color>");
             }
-            else
-            {
-                Debug.Log("<color=red>Invalid Brush Tool</color>");
-            }
+            
             setLastEditorTool(currentEditorTool);
             setCurrentEditorTool(currentEditorTool);
 
@@ -213,6 +214,8 @@ public class EditorMenu : MonoBehaviour
             userInclusion.HandleInclusion();
         }
     }
+
+   
 
 
 

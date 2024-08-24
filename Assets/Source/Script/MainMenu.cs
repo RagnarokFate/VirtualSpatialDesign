@@ -88,48 +88,11 @@ public class MainMenu : MonoBehaviour
         drawButton = GameObject.Find("DrawButton").GetComponent<Button>();
         measureButton = GameObject.Find("MeasureButton").GetComponent<Button>();
 
-        selectButton.onClick.AddListener(() => setCurrentTool(Tool.select));
-        deselectButton.onClick.AddListener(() => setCurrentTool(Tool.deselect));
-        insertButton.onClick.AddListener(() => setCurrentTool(Tool.insert));
-        drawButton.onClick.AddListener(() => setCurrentTool(Tool.draw));
-        measureButton.onClick.AddListener(() => setCurrentTool(Tool.measure));
-
-
-/*        // 2d shape buttons
-        pointButton = GameObject.Find("PointButton").GetComponent<Button>();
-        quadButton = GameObject.Find("QuadButton").GetComponent<Button>();
-        rectangleButton = GameObject.Find("RectangleButton").GetComponent<Button>();
-        polygonButton = GameObject.Find("PolygonButton").GetComponent<Button>();
-
-        // 3d shape buttons
-        archButton = GameObject.Find("ArchButton").GetComponent<Button>();
-        coneButton = GameObject.Find("ConeButton").GetComponent<Button>();
-        cubeButton = GameObject.Find("CubeButton").GetComponent<Button>();
-        cylinderButton = GameObject.Find("CylinderButton").GetComponent<Button>();
-        pipeButton = GameObject.Find("PipeButton").GetComponent<Button>();
-        planeButton = GameObject.Find("PlaneButton").GetComponent<Button>();
-        sphereButton = GameObject.Find("SphereButton").GetComponent<Button>();
-        spriteButton = GameObject.Find("SpriteButton").GetComponent<Button>();
-        stairButton = GameObject.Find("StairButton").GetComponent<Button>();
-        torusButton = GameObject.Find("TorusButton").GetComponent<Button>();
-
-
-        pointButton.onClick.AddListener(() => setDrawObject(DrawObject.Point));
-        quadButton.onClick.AddListener(() => setDrawObject(DrawObject.Quad));
-        rectangleButton.onClick.AddListener(() => setDrawObject(DrawObject.Rectangle));
-        polygonButton.onClick.AddListener(() => setDrawObject(DrawObject.Polygon));
-
-        archButton.onClick.AddListener(() => setShapeType(Shape3DType.Arch));
-        coneButton.onClick.AddListener(() => setShapeType(Shape3DType.Cone));
-        cubeButton.onClick.AddListener(() => setShapeType(Shape3DType.Cube));
-        cylinderButton.onClick.AddListener(() => setShapeType(Shape3DType.Cylinder));
-        pipeButton.onClick.AddListener(() => setShapeType(Shape3DType.Pipe));
-        planeButton.onClick.AddListener(() => setShapeType(Shape3DType.Plane));
-        sphereButton.onClick.AddListener(() => setShapeType(Shape3DType.Sphere));
-        spriteButton.onClick.AddListener(() => setShapeType(Shape3DType.Sprite));
-        stairButton.onClick.AddListener(() => setShapeType(Shape3DType.Stair));
-        torusButton.onClick.AddListener(() => setShapeType(Shape3DType.Torus));*/
-
+        selectButton.onClick.AddListener(() => CheckMainToolSwitch(Tool.select));
+        deselectButton.onClick.AddListener(() => CheckMainToolSwitch(Tool.deselect));
+        insertButton.onClick.AddListener(() => CheckMainToolSwitch(Tool.insert));
+        drawButton.onClick.AddListener(() => CheckMainToolSwitch(Tool.draw));
+        measureButton.onClick.AddListener(() => CheckMainToolSwitch(Tool.measure));
 
     }
 
@@ -154,8 +117,21 @@ public class MainMenu : MonoBehaviour
         return GameManager.Instance.lastTool;
     }
 
+    public void CheckMainToolSwitch(Tool tool)
+    {
+        if (getCurrentTool() != tool)
+        {
+            setCurrentTool(tool);
+        }
+        else
+        {
+            Debug.Log("Main tool has been set to `none`");
+            setCurrentTool(Tool.none);
+        }
+    }
+
     // ========================================================================================
-    
+
 
     public void HandleToolSwitch()
     {
@@ -190,10 +166,7 @@ public class MainMenu : MonoBehaviour
             {
                 Debug.Log("<color=blue> Measure Tool is enabled </color>");
             }
-            else
-            {
-                Debug.Log("No Tool is enabled");
-            }
+            
             setLastTool(currentTool);
         }
     }

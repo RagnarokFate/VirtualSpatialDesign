@@ -12,6 +12,8 @@ public class UserSelectEditor
     private List<Vector2> edges;
     private List<Face> faces;
 
+    public static bool isSelected = false;
+
     private Vector3 selectedVertex;
     private Vector2 selectedEdge;
     private Face selectedFace;
@@ -102,6 +104,7 @@ public class UserSelectEditor
             vertexGameObject.name = "Vertex";
 
             Debug.Log("Selected Vertex: " + selectedVertex);
+            isSelected = true;
         }
         else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Edge)
         {
@@ -133,7 +136,7 @@ public class UserSelectEditor
             lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
             Debug.Log("Selected Face: " + selectedFace);
-
+            isSelected = true;
         }
 
 
@@ -152,6 +155,30 @@ public class UserSelectEditor
         if (faceGameObject != null)
         {
             GameObject.Destroy(faceGameObject);
+        }
+    }
+
+    private void HoldSelection()
+    {
+        if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Vertex)
+        {
+            vertexGameObject.transform.position = selectedVertex;
+        }
+        else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Edge)
+        {
+            LineRenderer lineRenderer = edgeGameObject.GetComponent<LineRenderer>();
+            lineRenderer.SetPosition(0, vertices[(int)selectedEdge.x]);
+            lineRenderer.SetPosition(1, vertices[(int)selectedEdge.y]);
+        }
+        else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Face)
+        {
+            LineRenderer lineRenderer = faceGameObject.GetComponent<LineRenderer>();
+            lineRenderer.positionCount = selectedFace.indexes.Count + 1;
+            for (int i = 0; i < selectedFace.indexes.Count; i++)
+            {
+                lineRenderer.SetPosition(i, vertices[selectedFace.indexes[i]]);
+            }
+            lineRenderer.SetPosition(selectedFace.indexes.Count, vertices[selectedFace.indexes[0]]);
         }
     }
 
