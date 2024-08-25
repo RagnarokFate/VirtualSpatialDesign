@@ -118,6 +118,8 @@ public class UserMeasure
                 lineDistances.Add(distance);
 
                 Debug.Log("Distance: " + distance);
+
+                // Display the distance on the line
                 GameObject distanceText = new GameObject("DistanceText " + lineObjects.Count);
                 distanceText.transform.parent = LineObject.transform;
                 distanceText.transform.position = (vertices[0] + vertices[vertices.Count - 1])/2.0f;
@@ -130,6 +132,8 @@ public class UserMeasure
                 textMesh.anchor = TextAnchor.MiddleCenter;
 
                 textMesh.transform.LookAt(Camera.main.transform);
+                textMesh.transform.localRotation = Quaternion.Euler(textMesh.transform.localRotation.x, textMesh.transform.localRotation.y, 0);
+
                 textMesh.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 // Optionally, flip the text to avoid it being mirrored
                 textMesh.transform.Rotate(0, 180, 0);
@@ -184,4 +188,5 @@ public class UserMeasure
         }
         return distance;
     }
+    
 }
