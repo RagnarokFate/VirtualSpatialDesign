@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.ProBuilder;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
@@ -53,7 +54,11 @@ public class UserInsertion
             }
 
             Debug.Log("Left Mouse Clicked");
-            if(shapeType == Shape3DType.Cube)
+            if (shapeType.Equals(Shape3DType.None))
+            {
+                return;
+            }
+            if (shapeType == Shape3DType.Cube)
             {
                 pbMesh = ShapeGenerator.CreateShape(ShapeType.Cube, PivotLocation.FirstCorner);
             }
@@ -93,10 +98,7 @@ public class UserInsertion
             {
                 pbMesh = ShapeGenerator.CreateShape(ShapeType.Sprite, PivotLocation.FirstCorner);
             }
-            else
-            {
-                return;
-            }
+            SetShapeType(Shape3DType.None);
 
             pbMesh.transform.parent = MeshParent.transform;
             pbMesh.transform.position = meshPosition;
@@ -120,6 +122,8 @@ public class UserInsertion
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveGameObject(gameObject);
             GameManager.Instance.threeD_Counter++;
+
+            
         }
         /*if (Input.GetMouseButtonDown(1))
         {

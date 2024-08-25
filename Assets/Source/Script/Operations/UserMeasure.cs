@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class UserMeasure
@@ -117,7 +118,21 @@ public class UserMeasure
                 lineDistances.Add(distance);
 
                 Debug.Log("Distance: " + distance);
+                GameObject distanceText = new GameObject("DistanceText " + lineObjects.Count);
+                distanceText.transform.parent = LineObject.transform;
+                distanceText.transform.position = (vertices[0] + vertices[vertices.Count - 1])/2.0f;
+                distanceText.transform.position += Vector3.up * 0.2f;
+                TextMesh textMesh = distanceText.AddComponent<TextMesh>();
+                textMesh.text = distance.ToString("F2") + "m";
+                textMesh.fontSize = 9;
+                textMesh.color = Color.green;
+                textMesh.alignment = TextAlignment.Center;
+                textMesh.anchor = TextAnchor.MiddleCenter;
 
+                textMesh.transform.LookAt(Camera.main.transform);
+                textMesh.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                // Optionally, flip the text to avoid it being mirrored
+                textMesh.transform.Rotate(0, 180, 0);
                 vertices.Clear();
                 
             }

@@ -86,6 +86,8 @@ public class UserDrawment
             vertices.Clear();
             drawLine.DestroyLine();
 
+            drawObject = DrawObject.none;
+
 
         }
     }
