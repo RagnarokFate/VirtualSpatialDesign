@@ -33,23 +33,8 @@ public class MainMenu : MonoBehaviour
     public Material highlightMaterial;
     public Material selectionMaterial;
 
-/*    //2d shape buttons
-    private Button pointButton;
-    private Button quadButton;
-    private Button rectangleButton;
-    private Button polygonButton;
-
-    // 3d shape buttons
-    private Button archButton;
-    private Button coneButton;
-    private Button cubeButton;
-    private Button cylinderButton;
-    private Button pipeButton;
-    private Button planeButton;
-    private Button sphereButton;
-    private Button spriteButton;
-    private Button stairButton;
-    private Button torusButton;*/
+    private GameObject TextDecayGameObject;
+    private Canvas MainMenuLayout;
 
     private PocketPanelView pocketPanelView;
 
@@ -66,7 +51,7 @@ public class MainMenu : MonoBehaviour
         userInsertion = new UserInsertion();
         userMeasure = new UserMeasure();
 
-
+        MainMenuLayout = GameObject.Find("MainMenuLayout").GetComponent<Canvas>();
 
     }
 
@@ -140,33 +125,34 @@ public class MainMenu : MonoBehaviour
 
         if (currentTool != lastTool)
         {
-
+            TextDecayGameObject = new GameObject("TextDecayGameObject");
+            FadeOutText fadeOutText = TextDecayGameObject.AddComponent<FadeOutText>();
             Debug.Log("Current Main Tool : " + currentTool);
             if (currentTool == Tool.select)
             {
-                Debug.Log("<color=blue> Select Tool is enabled </color>");
+                FadeOutText.Show(2f, Color.green, "Select Tool is enabled", new Vector2(0, 400), MainMenuLayout.transform);
             }
             else if (currentTool == Tool.deselect)
             {
-                Debug.Log("<color=blue> Deselect Tool is enabled </color>");
+                FadeOutText.Show(2f, Color.green, "Deselect Tool is enabled", new Vector2(0, 400), MainMenuLayout.transform);
             }
             else if (currentTool == Tool.insert)
             {
-                Debug.Log("<color=blue> Insert Tool is enabled </color>");
-                // insert 3d objects presents of probuilder to scene
-
+                // Insert 3d objects presents of probuilder to scene
+                FadeOutText.Show(2f, Color.green, "3D Insert Tool is enabled", new Vector2(0, 400), MainMenuLayout.transform);
             }
             else if (currentTool == Tool.draw)
             {
-                Debug.Log("<color=blue> 2D Draw Tool is enabled </color>");
-
                 // draw 2d objects presents of probuilder to scene
+                FadeOutText.Show(2f, Color.green, "2D Draw Tool is enabled", new Vector2(0, 400), MainMenuLayout.transform);
+
             }
             else if (currentTool == Tool.measure)
             {
-                Debug.Log("<color=blue> Measure Tool is enabled </color>");
+                FadeOutText.Show(2f, Color.green, "Measure Tool is enabled", new Vector2(0, 400), MainMenuLayout.transform);
+
             }
-            
+
             setLastTool(currentTool);
         }
     }

@@ -26,7 +26,7 @@ public class EditorMenu : MonoBehaviour
     private Button PushButton;
 
     private Canvas editorMenu;
-
+    private GameObject TextDecayGameObject;
     //Prefabs
     public GameObject Vertex;
 
@@ -120,39 +120,41 @@ public class EditorMenu : MonoBehaviour
     {
         EditorTool currentEditorTool = getCurrentEditorTool();
         EditorTool lastEditorTool = getLastEditorTool();
-
+        
         if (currentEditorTool != lastEditorTool)
         {
+            TextDecayGameObject = new GameObject("TextDecayGameObject");
+            FadeOutText fadeOutText = TextDecayGameObject.AddComponent<FadeOutText>();
 
             Debug.Log("Current Brush Tool: " + currentEditorTool);
             if(currentEditorTool == EditorTool.select && !isSelected)
             {
-                Debug.Log("<color=green>select an element from screen.</color>");
-
+                FadeOutText.Show(2f, Color.green, "Selection an element is enabled", new Vector2(0, 400), editorMenu.transform);
             }
             else if (currentEditorTool == EditorTool.insert && !isSelected)
             {
-                Debug.Log("<color=green>Insert an element</color>");
+                FadeOutText.Show(2f, Color.green, "Insertion an element is enabled", new Vector2(0, 400), editorMenu.transform);
+
             }
             else if(currentEditorTool == EditorTool.edit && !isSelected)
             {
-                Debug.Log("<color=green>Edit an element</color>");
+                FadeOutText.Show(2f, Color.green, "Editing an element is enabled", new Vector2(0, 400), editorMenu.transform);
+
             }
             else if (currentEditorTool == EditorTool.delete && !isSelected)
             {
-                Debug.Log("<color=green>Delete an element</color>");
+                FadeOutText.Show(2f, Color.green, "Deletion an element is enabled", new Vector2(0, 400), editorMenu.transform);
             }
             else if (currentEditorTool == EditorTool.pull && !isSelected)
             {
-                Debug.Log("<color=green>Pull an element</color>");
+                FadeOutText.Show(2f, Color.green, "Extrusion an element is enabled", new Vector2(0, 400), editorMenu.transform);
                 GameManager.Instance.selectModeToEdit = SelectModeToEdit.Face;
-                Debug.Log("<color=purple>Face Mode FORCE | ENABLED</color>");
             }
             else if (currentEditorTool == EditorTool.push && !isSelected)
             {
-                Debug.Log("<color=green>Push an element</color>");
+                FadeOutText.Show(2f, Color.green, "Inclusion an element is enabled", new Vector2(0, 400), editorMenu.transform);
+
                 GameManager.Instance.selectModeToEdit = SelectModeToEdit.Face;
-                Debug.Log("<color=purple>Face Mode FORCE | ENABLED</color>");
             }
             
             setLastEditorTool(currentEditorTool);

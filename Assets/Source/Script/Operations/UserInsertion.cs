@@ -53,8 +53,7 @@ public class UserInsertion
                 return;
             }
 
-            Debug.Log("Left Mouse Clicked");
-            if (shapeType.Equals(Shape3DType.None))
+            if (shapeType == Shape3DType.None)
             {
                 return;
             }
