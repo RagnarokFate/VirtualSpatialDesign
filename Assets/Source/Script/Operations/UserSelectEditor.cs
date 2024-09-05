@@ -108,7 +108,7 @@ public class UserSelectEditor
         }
         else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Edge)
         {
-            edgeGameObject = new GameObject("Edge");
+            /*edgeGameObject = new GameObject("Edge");
             LineRenderer lineRenderer = edgeGameObject.AddComponent<LineRenderer>();
             lineRenderer.positionCount = 2;
             lineRenderer.SetPosition(0, vertices[(int)selectedEdge.x]);
@@ -116,7 +116,7 @@ public class UserSelectEditor
             lineRenderer.startWidth = 0.1f;
             lineRenderer.endWidth = 0.1f;
             lineRenderer.startColor = new Color32(70, 184, 163, 255);
-            lineRenderer.endColor = new Color32(70, 184, 163, 255);
+            lineRenderer.endColor = new Color32(70, 184, 163, 255);*/
         }
         else if (GameManager.Instance.selectModeToEdit == SelectModeToEdit.Face)
         {

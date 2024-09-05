@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 using UnityEngine.UI;
 
 
@@ -37,6 +38,8 @@ public class UserMeasure
         this.tolerance = 0.1f;
 
         lineObjectList = GameObject.Find("LineObjectList");
+        lineObjects.Clear();
+
     }
 
     //create destructor
@@ -86,7 +89,6 @@ public class UserMeasure
                 lineRenderer.startWidth = width;
                 lineRenderer.endWidth = width;
 
-                lineObjects.Add(LineObject);
             }
             else if (isMeasuring)
             {
@@ -104,6 +106,12 @@ public class UserMeasure
 
             if (Input.GetMouseButtonUp(0))
             {
+                if(LineObject == null)
+                {
+                    return;
+                }
+                lineObjects.Add(LineObject);
+
                 LineRenderer lineRenderer = LineObject.GetComponent<LineRenderer>();
                 if (lineRenderer == null)
                 {
@@ -116,6 +124,10 @@ public class UserMeasure
 
                 float distance = CalculateDistance();
                 lineDistances.Add(distance);
+
+                string text = "Distance of the Measured Line is : " + distance;
+                FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
+
 
                 Debug.Log("Distance: " + distance);
 
@@ -152,6 +164,11 @@ public class UserMeasure
                 lineDistances.Clear();
             }
         }
+
+        if(lineObjects.Count != 0)
+        {
+            RotateDistanceText();
+        }
     }
 
 
@@ -167,6 +184,28 @@ public class UserMeasure
             lineRenderer.SetPositions(vertices.ToArray());
         }
     }
+
+
+    public void RotateDistanceText()
+    {
+        if (lineObjects.Count == 0 || Camera.main == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < lineObjects.Count; i++)
+        {
+            if (lineObjects[i] != null && lineObjects[i].transform.childCount > 0)
+            {
+                GameObject distanceText = lineObjects[i].transform.GetChild(0).gameObject;
+
+                distanceText.transform.LookAt(Camera.main.transform);
+                float scalefactor = 0.1f;
+                distanceText.transform.localScale = scalefactor * new Vector3(-1.0f, 1, 1);
+            }
+        }
+    }
+
 
     public void ClearLine()
     {

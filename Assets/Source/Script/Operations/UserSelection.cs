@@ -48,7 +48,9 @@ public class UserSelection
                 selectedObject = hit.collider.gameObject;
                 if (selectedObject.GetComponent<MeshRenderer>().material != selectionMaterial && selectedObject.CompareTag("Selectable"))
                 {
-                    Debug.Log("Selected object : " + selectedObject.name);
+                    string text = "Selected object :" + selectedObject.name + " at hit position of : " + hit.point.ToString();
+                    FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
+
                     GameManager.Instance.SetActiveGameObject(selectedObject);
                     // Store the default material of the selected object
                     selectedObjectDefaultMaterial = selectedObject.GetComponent<MeshRenderer>().sharedMaterial;

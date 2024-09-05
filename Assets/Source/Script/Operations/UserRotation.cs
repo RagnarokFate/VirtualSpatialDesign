@@ -72,6 +72,9 @@ public class UserRotation
                 if (Input.GetMouseButtonUp(0)) // Stop rotation on mouse up
                 {
                     isRotating = false;
+
+                    string text = "Selected object :" + gameObject.name + " with rotation vector of :" + gameObject.transform.localRotation.ToString();
+                    FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
                 }
             }
         }

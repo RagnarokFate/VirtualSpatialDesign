@@ -104,8 +104,10 @@ public class UserInclusion
                 // Stop extrusion on left mouse button release
                 if (Input.GetMouseButtonUp(0) && isInclusing && selectedFace != null)
                 {
-                    Debug.Log("Final Extrusion Value: " + finalInclusionnValue);
-                    
+                    Debug.Log("Final Inclusion Value: " + finalInclusionnValue);
+                    string text = "Inclusion on face " + selectedFace.ToString() + " with a value of " + finalInclusionnValue;
+                    FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("EditorMenu").GetComponent<Canvas>().transform);
+
                     isInclusing = false;
                     locked = false;
 

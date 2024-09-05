@@ -29,6 +29,9 @@ public class UserDeletion
 
             if (gameObjects.Contains(gameObject))
             {
+                string text = "Deleting game object : " + gameObject.name;
+                FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
+
                 gameObjects.Remove(gameObject);
                 Object.Destroy(gameObject);
                 if(GameManager.Instance.IsItAMesh(gameObject))

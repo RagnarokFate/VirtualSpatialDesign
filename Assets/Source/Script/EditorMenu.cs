@@ -35,6 +35,7 @@ public class EditorMenu : MonoBehaviour
     public UserEditEditor userEditEditor;
     public UserDeleteEditor userDeleteEditor;*/
     private UserSelectEditor userSelectEditor;
+    private UserInsertEditor userInsertEditor;
     private UserExtrusion userExtrusion;
     private UserInclusion userInclusion;
 
@@ -48,6 +49,7 @@ public class EditorMenu : MonoBehaviour
         userExtrusion = new UserExtrusion();
         userInclusion = new UserInclusion();
         userSelectEditor = new UserSelectEditor();
+        userInsertEditor = new UserInsertEditor(Vertex);
         userSelectEditor.setPrefabs(Vertex);
 
 
@@ -197,7 +199,7 @@ public class EditorMenu : MonoBehaviour
         }
         else if (currentEditorTool == EditorTool.insert)
         {
-            // userInsertEditor.HandleInsert();
+            userInsertEditor.HandleInsertEditor();
         }
         else if (currentEditorTool == EditorTool.edit)
         {

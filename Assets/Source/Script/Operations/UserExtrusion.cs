@@ -105,7 +105,10 @@ public class UserExtrusion
                 if (Input.GetMouseButtonUp(0) && isExtruding && selectedFace != null)
                 {
                     Debug.Log("Final Extrusion Value: " + finalExtrusionValue);
-                    
+
+                    string text = "Extrusion on face " + selectedFace.ToString() + " with a value of " + finalExtrusionValue;
+                    FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("EditorMenu").GetComponent<Canvas>().transform);
+
                     isExtruding = false;
                     locked = false;
 

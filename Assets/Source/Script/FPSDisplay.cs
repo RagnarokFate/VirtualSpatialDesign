@@ -5,8 +5,6 @@ using TMPro;
 
 public class FPSDisplay : MonoBehaviour
 {
-	[SerializeField]
-    private static bool visible = false;
 
 	// Variables to calculate FPS
 	private int frameCount = 0;
@@ -14,7 +12,7 @@ public class FPSDisplay : MonoBehaviour
 	private float fps = 0.0f;
 	private float updateInterval = 1.0f;
 
-    public Text displayText;
+    public GameObject displayText;
 
 
     void Start()
@@ -44,12 +42,12 @@ public class FPSDisplay : MonoBehaviour
 	{
 		string fpsString = $"FPS: {fps:F2}\n";
 		string gameManagerState = GameManager.Instance.ToString();
-		displayText.text = fpsString + gameManagerState;
+		displayText.GetComponent<Text>().text = fpsString + gameManagerState;
     }
 
     public void ToggleDisplay()
     {
-        visible = !visible;
-        displayText.enabled = visible;
+		bool active = displayText.active;
+        displayText.SetActive(!active);
     }
 }

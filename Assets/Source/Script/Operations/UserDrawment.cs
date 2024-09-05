@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
@@ -71,6 +72,8 @@ public class UserDrawment
                 Polygon polygon = new Polygon(vertices);
                 pbMesh = polygon.CreatePolygonProBuilder();
             }
+            string text = "Drawing an object " + drawObject.ToString() + " Vertices Count :" + vertices.Count;
+            FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
 
             // gameObject = polygon.CreatePolygon();
             gameObject = pbMesh.gameObject;
@@ -78,7 +81,7 @@ public class UserDrawment
             gameObject.tag = "Selectable";
             gameObject.AddComponent<MeshCollider>().convex = true;
 
-            // gameObject.AddComponent<Rigidbody>();
+            //gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveGameObject(gameObject);

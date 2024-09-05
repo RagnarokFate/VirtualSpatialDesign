@@ -72,6 +72,10 @@ public class UserScale
 
                 if (Input.GetMouseButtonUp(0)) // Stop scaling on mouse up
                 {
+
+                    string text = "Scaling the " + gameObject.name + " with Scale vector of :" + gameObject.transform.localScale.ToString();
+                    FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
+
                     isScaling = false;
                 }
             }

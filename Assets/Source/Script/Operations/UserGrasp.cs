@@ -10,7 +10,7 @@ public class UserGrasp
     private AxisLock axisLock;
 
     public bool meshPositionLock;
-
+    private Vector3 previousPos;
     public UserGrasp()
     {
         meshPositionLock = false;
@@ -23,13 +23,16 @@ public class UserGrasp
     {
         GameObject gameObject = GameManager.Instance.activeGameObject;
         
-
+        if(previousPos == null)
+        {
+            previousPos = gameObject.transform.position;
+        }
         if (gameObject != null)
         {
             Vector2 mousePos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 worldPos;
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject != null)
             {
                 worldPos = hit.point;
             }
@@ -42,7 +45,9 @@ public class UserGrasp
             {
                 lockPosition();
                 gameObject.transform.position = worldPos;
-                
+                previousPos = worldPos;
+                string text = "Tranlated game object " + gameObject.name + " to position : " + worldPos.ToString() ;
+                FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
                 return;
             }
             HandleLock();
@@ -50,16 +55,18 @@ public class UserGrasp
             {
                 if (axisLock == AxisLock.X_Axis)
                 {
-                    gameObject.transform.position = new Vector3(worldPos.x, gameObject.transform.position.y, gameObject.transform.position.z);
+                    gameObject.transform.position = new Vector3(worldPos.x, previousPos.y, previousPos.z);
                 }
                 else if (axisLock == AxisLock.Y_Axis)
                 {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, worldPos.y, gameObject.transform.position.z);
+                    gameObject.transform.position = new Vector3(previousPos.x, worldPos.y, previousPos.z);
                 }
                 else if (axisLock == AxisLock.Z_Axis)
                 {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, worldPos.z);
+                    gameObject.transform.position = new Vector3(previousPos.x, previousPos.y, worldPos.z);
                 }
+                previousPos = gameObject.transform.position;
+
             }
             else
             {

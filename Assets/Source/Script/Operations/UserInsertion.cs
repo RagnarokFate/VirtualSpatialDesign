@@ -10,11 +10,13 @@ public enum Shape3DType { Arch, Cone, Cube, Cylinder, Pipe, Plane, Sphere , Spri
 
 public class UserInsertion
 {
-	public Shape3DType shapeType = Shape3DType.Cube;
+	public static Shape3DType shapeType = Shape3DType.Cube;
 	public Vector3 PivotPoint;
 
     ProBuilderMesh pbMesh;
     GameObject MeshParent;
+
+    PivotLocation pivotLocation = PivotLocation.FirstCorner;
 
     public UserInsertion()
     {
@@ -30,9 +32,9 @@ public class UserInsertion
     }
 
 
-    public void SetShapeType(Shape3DType shapeType)
+    public void SetShapeType(Shape3DType input)
     {
-        this.shapeType = shapeType;
+        shapeType = input;
     }
 
 
@@ -59,45 +61,47 @@ public class UserInsertion
             }
             if (shapeType == Shape3DType.Cube)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Cube, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Cube, pivotLocation);
             }
             else if (shapeType == Shape3DType.Sphere)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Sphere, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Sphere, pivotLocation);
             }
             else if (shapeType == Shape3DType.Cylinder)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Cylinder, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Cylinder, pivotLocation);
             }
             else if (shapeType == Shape3DType.Pipe)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Pipe, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Pipe, pivotLocation);
             }
             else if (shapeType == Shape3DType.Plane)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Plane, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Plane, pivotLocation);
             }
             else if (shapeType == Shape3DType.Torus)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Torus, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Torus, pivotLocation);
             }
             else if (shapeType == Shape3DType.Stair)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Stair, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Stair, pivotLocation);
             }
             else if (shapeType == Shape3DType.Arch)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Arch, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Arch, pivotLocation);
             }
             else if (shapeType == Shape3DType.Cone)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Cone, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Cone, pivotLocation);
             }
             else if (shapeType == Shape3DType.Sprite)
             {
-                pbMesh = ShapeGenerator.CreateShape(ShapeType.Sprite, PivotLocation.FirstCorner);
+                pbMesh = ShapeGenerator.CreateShape(ShapeType.Sprite, pivotLocation);
             }
-            SetShapeType(Shape3DType.None);
+
+            string text = "Inserting " + shapeType.ToString() + " at " + meshPosition.ToString();
+            FadeOutText.Show(3f, Color.blue, text, new Vector2(0, 350), GameObject.Find("MainMenuLayout").GetComponent<Canvas>().transform);
 
             pbMesh.transform.parent = MeshParent.transform;
             pbMesh.transform.position = meshPosition;
@@ -116,7 +120,7 @@ public class UserInsertion
             {
                 Debug.LogError("Physics Material/Bouncy not found in the Resources folder. Please create one and name it 'Bouncy'.");
             }*/
-            //gameObject.AddComponent<Rigidbody>();
+            // gameObject.AddComponent<Rigidbody>();
 
             GameManager.Instance.AddGameObject(gameObject);
             GameManager.Instance.SetActiveGameObject(gameObject);

@@ -58,7 +58,6 @@ public class FadeOutText : MonoBehaviour
     {
         if (uiText == null)
         {
-            Debug.LogWarning("uiText is null. Check if Initialize method was called.");
             return;
         }
 
