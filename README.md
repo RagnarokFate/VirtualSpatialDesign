@@ -10,7 +10,7 @@ Virtual Spatial Design, is a BSc final project for Computer Science at Universit
 
 
 ### Weekly Updates
-##### Week 1 - Learn C# & Unity Editor
+#### Week 1 - Learn C# & Unity Editor
 Mainly, Reading Books and Doucments, watching videos on Youtube. 
 
 - Youtube Videos:
@@ -27,7 +27,7 @@ Mainly, Reading Books and Doucments, watching videos on Youtube.
 
 
 
-##### Week 2 - Setting OpenXR & MixedReality Package
+#### Week 2 - Setting OpenXR & MixedReality Package
 
 - Via `MixedRealityFeatureTool`, I downloaded `MRTK3` package , then sets up the VR setup enabling player movement.
 - Installation of `ProBuilder` plugin. 
@@ -35,43 +35,43 @@ Mainly, Reading Books and Doucments, watching videos on Youtube.
 
 
 
-##### Week 3 - Creating A Basic Enviroment & Character Movement & Setting L/R Controllers
+#### Week 3 - Creating A Basic Enviroment & Character Movement & Setting L/R Controllers
 Building an enviroment along with setting up L/R controllers as it should be. Afterwards, worked on Character ActionMap for Character Movement.
 
 
-##### Week 4 - ProBuilder Script API 
+#### Week 4 - ProBuilder Script API 
 Creating classes Polygon, Rectangle,Quad and Point as 2D Mesh Objects. For the 3D Mesh Objects, I've used ProBuilder `CreateShape` Supporting multiple different game objects useful for archicture in real-time.
 
 
 
-##### Week 5 - Real-time Line Drawing + GUI Modification
+#### Week 5 - Real-time Line Drawing + GUI Modification
 Instead of blindly chosing vertices, i worked on drawing a line that visualize the edges of the polygon during drawing procedure. Furthermore, i added Canvas that hold ons the main GUI for user that accompany the user during runtime.
 
 
 
 
-##### Week 6 - Real-time Selection & Hover Highlighting
+#### Week 6 - Real-time Selection & Hover Highlighting
 Adding MeshCollider for each created Mesh during runtime and enabling both Hover-Highlight and Selection.
 
 
 
-##### Week 7 - Basic Transformation & Singleton Class
+#### Week 7 - Basic Transformation & Singleton Class
 Creating the basic Transformation for Mesh Objects (Scale,Rotate and Translate) where the user can modify objects `Transform` componenet. Moreover, establishing a singleton class that contain all the nessecary data to move data from scene to another and hold on the nessecary game objects.
 
 
 
 
-##### Week 8 - Scenes Managment + Scene UI
+#### Week 8 - Scenes Managment + Scene UI
 Creating Multiple Scenes; Welcome, Settings, Main and Editor. where Welcome is an intro page for the project, the Settings responsible for Charachter & Game Settings, lastly Main and Editor are the project pillars that I am relying on. 
 
 
 
-##### Week 9 - PushPull+ (Extrusion/Inclusion) + Measure Tool
+#### Week 9 - PushPull+ (Extrusion/Inclusion) + Measure Tool
 Creating Extrusion and Inclusion in runtime over game object that has been sent to Editor scene where it provides mesh object shape manipulation + Optimization process where i deleted the non-nessecary elements (Vertices and Faces).
 
 
 
-##### Week 10 - Options List + Game Message
+#### Week 10 - Options List + Game Message
 Creating a Options list which contain :
 1. Subdivision Game Object: 
 2. Flipping Edges
@@ -83,12 +83,12 @@ Creating a Options list which contain :
 8. Viusualize Vertices
 
 
-##### Week 11 - Face Subtraction 
-Subtraction of a Sub-face from the main face where it divide the face into 9 different faces. 
+#### Week 11 - Face Subtraction & Hole Generation
+Subtraction of a Sub-face from the main face where it divide the face into 9 different faces. Hole generation contain same principle except it deletes the subface as well generating a hole inside a face.
 
 
-##### Week 12 - Fixing Buggs
-
+#### Week 12 - Fixing Buggs
+I've modified the structure of the scenes and added few things and fixed few bugs along the execution.
 
 
 
