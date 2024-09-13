@@ -20,8 +20,6 @@ public class UserInsertEditor : UserSelectEditor
 
     protected bool isMouseHolding = false;
 
-    private GameObject rectanglePreview;
-    private List<Vector3> rectangleVertices;
 
 
 
@@ -224,13 +222,7 @@ public class UserInsertEditor : UserSelectEditor
                     pbMesh.faces = faces;
 
                     vertexIndices = closestFace.distinctIndexes.ToArray();
-                    int index1 = vertexIndices[0], index2 = vertexIndices[1], index3 = vertexIndices[2], index4 = vertexIndices[3];
-                    //reschedule the indices to rectange 
-                    // closestFace = new Face(new int[] { index1, index3, index2, index3, index4, index1 });
-                    /*closestFace = new Face(new int[] { index1, index3, index2, index3, index4, index1 });
-                    closestFace.Reverse();*/
-
-                    
+                    int index1 = vertexIndices[0], index2 = vertexIndices[1], index3 = vertexIndices[2], index4 = vertexIndices[3];                    
 
                     //subtract the face creating 9 new faces and remove the main face aftwards
                     FaceSubtraction faceSubtraction = new FaceSubtraction(vertices, faces);

@@ -107,5 +107,12 @@ public class ScenesLoader : MonoBehaviour
         SceneManager.LoadScene("Welcome");
     }
 
+    // ===================== Start Scene =====================
+    public void InitalizeMainScene()
+    {
+        SceneManager.LoadScene("Main");
+    }
+
+
 }
 

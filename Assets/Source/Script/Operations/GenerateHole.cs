@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
-public class FaceSubtraction
+public class GenerateHole
 {
     private List<Vector3> vertices;
     private List<Face> faces;
@@ -14,13 +14,13 @@ public class FaceSubtraction
     private Face mainFace;
     private Face subFace;
 
-    public FaceSubtraction(List<Vector3> vertices, List<Face> faces)
+    public GenerateHole(List<Vector3> vertices, List<Face> faces)
     {
         this.vertices = vertices;
         this.faces = faces;
     }
 
-    public FaceSubtraction(List<Vector3> vertices, List<Face> faces, Face mainFace, Face subFace)
+    public GenerateHole(List<Vector3> vertices, List<Face> faces, Face mainFace, Face subFace)
     {
         this.vertices = vertices;
         this.faces = faces;
@@ -29,9 +29,9 @@ public class FaceSubtraction
     }
 
     /// <summary>
-    /// Subtracts subFace from mainFace, modifies the mesh, and returns the intersection points.
+    /// Deletes subFace from mainFace, modifies the mesh, and returns the intersection points.
     /// </summary>
-    public void SubtractFace(ProBuilderMesh pbMesh, Face mainFace, Face subFace)
+    public void DeleteSubFace(ProBuilderMesh pbMesh, Face mainFace, Face subFace)
     {
         List<Vector3> meshVertices = pbMesh.positions.ToList();
         List<Face> meshFaces = pbMesh.faces.ToList();
@@ -67,7 +67,7 @@ public class FaceSubtraction
         // Generate new subfaces based on intersection points
         List<Face> subFaces;
         List<Vector3> modifiedVertices;
-        (subFaces,modifiedVertices) = CreateSubFaces(intersectionPoints, mainFaceIndices, subFaceIndices, meshVertices);
+        (subFaces, modifiedVertices) = CreateSubFaces(intersectionPoints, mainFaceIndices, subFaceIndices, meshVertices);
 
         RemoveFaceWithoutRemovingVertices(pbMesh, mainFace);
         meshFaces.AddRange(subFaces);
@@ -184,8 +184,7 @@ public class FaceSubtraction
         subFaces.Add(CreateRectangle(I8Index, WIndex, ZIndex, I7Index));
 
         // Center rectangle (subface): W - X - Y - Z (Subface rectangle in the center)
-        // subFaces.Add(CreateRectangle(WIndex, XIndex, YIndex, ZIndex));
-        subFaces.Add(CreateRectangle(subface_index_W, subface_index_X, subface_index_Y, subface_index_Z));
+        // HOLE GENERATED - FACE DELETED
 
         // Middle-right rectangle: X - I3 - I4 - Y (Middle-right area between BC and YZ)
         subFaces.Add(CreateRectangle(XIndex, I3Index, I4Index, YIndex));

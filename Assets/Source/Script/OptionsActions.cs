@@ -23,11 +23,30 @@ public class OptionsActions : MonoBehaviour
 
     private static bool isTriangle = false;
 
+    private List<Vector3> UndoVertices = new List<Vector3>();
+    private List<Face> UndoFaces = new List<Face>();
+
+    private List<Vector3> RedoVertices = new List<Vector3>();
+    private List<Face> RedoFaces = new List<Face>();
+
+
     // Start is called before the first frame update
     void Start()
     {
         this.vertixRootParent = new GameObject("Vertices");
         this.gridRootParent = new GameObject("Grid");
+
+        if(GameManager.Instance.activeGameObject != null)
+        {
+            ProBuilderMesh pbMesh = gameObject.GetComponent<ProBuilderMesh>();
+            if(pbMesh != null)
+            {
+                // Get original vertices and faces
+                List<Vector3> UndoVertices = new List<Vector3>(pbMesh.positions);
+                List<Face> UndoFaces = new List<Face>(pbMesh.faces);
+            }
+        }
+
     }
 
     public void ToggleSubdivision()
@@ -239,6 +258,51 @@ public class OptionsActions : MonoBehaviour
             gameObject.SetActive(true);
         }
         CloseOptionsPanel();
+    }
+
+    public void ToggleUndo()
+    {
+        if(UndoVertices.Count > 0 && UndoFaces.Count > 0)
+        {
+            GameObject gameObject = GameManager.Instance.activeGameObject;
+            if (gameObject != null)
+            {
+                ProBuilderMesh pbMesh = gameObject.GetComponent<ProBuilderMesh>();
+                if (pbMesh != null)
+                {
+                    RedoVertices = new List<Vector3>(pbMesh.positions);
+                    RedoFaces = new List<Face>(pbMesh.faces);
+
+
+                    pbMesh.RebuildWithPositionsAndFaces(UndoVertices, UndoFaces);
+
+                    pbMesh.ToMesh();
+                    pbMesh.Refresh();
+                }
+            }
+        }
+    }
+
+    public void ToggleRedo()
+    {
+        if (RedoVertices.Count > 0 && RedoFaces.Count > 0)
+        {
+            GameObject gameObject = GameManager.Instance.activeGameObject;
+            if (gameObject != null)
+            {
+                ProBuilderMesh pbMesh = gameObject.GetComponent<ProBuilderMesh>();
+                if (pbMesh != null)
+                {
+                    UndoVertices = new List<Vector3>(pbMesh.positions);
+                    UndoFaces = new List<Face>(pbMesh.faces);
+
+                    pbMesh.RebuildWithPositionsAndFaces(RedoVertices, RedoFaces);
+
+                    pbMesh.ToMesh();
+                    pbMesh.Refresh();
+                }
+            }
+        }
     }
 
     public void CloseOptionsPanel()
