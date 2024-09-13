@@ -6,7 +6,7 @@ Student Name : Bashar Beshoti
 
 
 ### About The Project
-Virtual Spatial Design, is a BSc final project for Computer Science at University Of Haifa supervised by **Prof Roi Poranne**. It leverages geometric comprehension and full algebraic functionality to render scenes in real-time. The primary aim of the project is to facilitate interior designing through various functionalities such as PushPull+, Mesh Model Transformation, Scalping Mesh Model, among others.
+Virtual Spatial Design, is a BSc final project at University Of Haifa supervised by **Prof Roi Poranne**. It leverages geometric comprehension and full algebraic functionality to render scenes in real-time. The primary aim of the project is to facilitate interior designing through various functionalities such as PushPull+, Mesh Model Transformation, Scalping Mesh Model, among others.
 
 
 ### Weekly Updates
