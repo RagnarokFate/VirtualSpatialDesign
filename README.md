@@ -78,7 +78,7 @@ Instead of blindly chosing vertices, i worked on drawing a line that visualize t
 #### Week 6 - Real-time Selection & Hover Highlighting
 Adding MeshCollider for each created Mesh during runtime and enabling both Hover-Highlight and Selection.
 
-<image src="https://github.com/user-attachments/assets/ddb2df02-cbf6-43e3-a62e-3557ae52f848" width="360" height="360"/>
+<image src="https://github.com/user-attachments/assets/ddb2df02-cbf6-43e3-a62e-3557ae52f848" width="720" height="405"/>
 
 <em> Figure 7 : Real-time Selection & Hover Highlighting over runtime created objects only </em>
 
@@ -122,7 +122,7 @@ Creating Extrusion and Inclusion in runtime over game object that has been sent 
 
 <image src="https://github.com/user-attachments/assets/68cc1f89-1617-4bfc-9cc4-141135b33bb5" width="720" height="405"/>
 
-<em> Figure 14 : Push/Extrusion </em>
+<em> Figure 14 : Pull/Extrusion </em>
 
 <image src="https://github.com/user-attachments/assets/0e300398-1e07-4c4e-8273-8919e81e3208" width="720" height="405"/>
 
